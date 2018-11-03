@@ -1,0 +1,1 @@
+var appurl='http://localhost:8888/api';

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- H5页面窗口自动调整到设备宽度，并禁止用户缩放页面-->
+    <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,user-scalable=no">
+    <!--当网站添加到主屏幕快速启动方式，可隐藏地址栏，仅针对ios的safari-->
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <!--将网站添加到主屏幕快速启动方式，仅针对ios的safari顶端状态条的样式-->
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <!--忽略将页面中的数字识别为电话号码-->
+    <meta content="telephone=no" name="format-detection">
+    <!--忽略Android平台中对邮箱地址的识别-->
+    <meta content="email=no" name="format-detection">
+    <title>便民站检查</title>
+    <link rel="stylesheet" type="text/css" href="../css/media.css">
+    <link rel="stylesheet" type="text/css" href="../js/layer/theme/default/layer.css">
+    <link rel="stylesheet" type="text/css" href="../css/validate.css">
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
+    <link rel="stylesheet" type="text/css" href="../css/register.css">
+    <link rel="stylesheet" type="text/css" href="../css/siteCheck.css">
+</head>
+<body>
+<form id="checkForm" method="post" enctype="multipart/form-data">
+    <div class="clear">
+        <label for="city">市</label>
+        <select id="city" onchange="getCounty();">
+            <option value="">请选择</option>
+        </select>
+    </div>
+    <div class="clear">
+        <label for="county">区/县</label>
+        <select id="county" onchange="getTown();">
+            <option value="">请选择</option>
+        </select>
+    </div>
+    <div class="clear">
+        <label for="town">街道/乡镇</label>
+        <select id="town" onchange="getVillage();">
+            <option value="">请选择</option>
+        </select>
+    </div>
+    <div class="clear">
+        <label for="village">小区/村</label>
+        <select name="regionId" id="village" data-required="true" data-descriptions="regionId"
+                onchange="getSite();">
+            <option value="">请选择</option>
+        </select>
+    </div>
+    <div class="clear">
+        <label for="subofficeSite">所属支局</label>
+        <select name="siteId" id="subofficeSite" data-required="true" data-descriptions="siteId">
+            <option value="">请选择</option>
+        </select>
+    </div>
+    <div class="clear">
+        <label>门头</label>
+        <div class="radioDiv">
+            <input type="radio" value="0"  name="overDoor" id="have" data-required="true"  data-descriptions="overDoor">
+            <label class="same" for="have">有</label>
+            <input type="radio" value="1" name="overDoor" id="none" data-required="true"  data-descriptions="overDoor">
+            <label class="same"  for="none">无</label>
+        </div>
+    </div>
+    <div class="clear">
+        <label>服务功能牌</label>
+        <div class="radioDiv">
+            <input type="radio" value="0" name="serviceCard" id="haveCard" data-required="true"  data-descriptions="serviceCard">
+            <label class="same" for="haveCard">有</label>
+            <input type="radio" value="1" name="serviceCard" id="noneCard" data-required="true"  data-descriptions="serviceCard">
+            <label class="same"  for="noneCard">无</label>
+        </div>
+    </div>
+    <div class="clear">
+        <label>助农取款器</label>
+        <div class="radioDiv">
+            <input type="radio" value="0" name="device" id="normal" data-required="true"  data-descriptions="device">
+            <label class="same" for="normal">正常</label>
+            <input type="radio" value="1" name="device" id="breakdown" data-required="true"  data-descriptions="device">
+            <label class="same"  for="breakdown">故障</label>
+            <input type="radio" value="2" name="device" id="noneDevice" data-required="true"  data-descriptions="device">
+            <label class="same"  for="noneDevice">无</label>
+        </div>
+    </div>
+    <div class="clear">
+        <label>刷卡器</label>
+        <div class="radioDiv">
+            <input type="radio" value="0" name="cardMachine" id="normalMachine" data-required="true"  data-descriptions="cardMachine">
+            <label class="same" for="normalMachine">正常</label>
+            <input type="radio" value="1" name="cardMachine" id="breakdownMachine" data-required="true"  data-descriptions="cardMachine">
+            <label class="same"  for="breakdownMachine">故障</label>
+            <input type="radio" value="2" name="cardMachine" id="noneMachine" data-required="true"  data-descriptions="cardMachine">
+            <label class="same"  for="noneMachine">无</label>
+        </div>
+    </div>
+    <div class="clear">
+        <label>电视播放功能</label>
+        <div class="radioDiv">
+            <input type="radio" value="0"  name="televisor" id="normalTel" data-required="true"  data-descriptions="televisor">
+            <label class="same" for="normalTel">正常</label>
+            <input type="radio" value="1" name="televisor" id="breakdownTel" data-required="true"  data-descriptions="televisor">
+            <label class="same"  for="breakdownTel">故障</label>
+            <input type="radio" value="2" name="televisor" id="noneTel" data-required="true"  data-descriptions="televisor">
+            <label class="same"  for="noneTel">无</label>
+        </div>
+    </div>
+    <div class="clear textArea">
+        <label>发现问题</label>
+        <textarea name="question" rows="5" placeholder="请输入工作记录"></textarea>
+    </div>
+    <div>
+        <button type="submit" class="postBtn">提&nbsp;交</button>
+    </div>
+</form>
+<script type="text/javascript" src="../js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="../js/layer/layer.js"></script>
+<script type="text/javascript" src="../js/jquery-mvalidate.js"></script>
+<script type="text/javascript"  src="../../static/js/app.js"></script>
+<script type="text/javascript"  src="../js/register.js"></script>
+<script type="text/javascript">
+    //提交
+    function finishPost() {
+        $.ajax({
+            url: appUrl + "/members/register",
+            data: JSON.stringify($("#registerForm").serializeJson()),
+            type: 'put',
+            contentType: 'application/json',
+            success: function (data) {
+                if (data.status == 0) {
+                    location.href = "tips.html";
+                } else {
+                    layer.open({
+                        title: [
+                            '提示信息',
+                            'background-color:#1AA094; color:#fff;'
+                        ],
+                        content:data.data,
+                        btn: '我知道了'
+                    });
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+
+    //先验证再提交
+    $("#checkForm").mvalidate({
+        type: 1,//验证类型,类型1：弹出提示信息，类型2：未通过验证的表单下面显示提示文字
+        onKeyup: true,//输入放开键盘的时候,是否需要验证
+        sendForm: false,//表单通过验证的时候，是否需要提交表单
+        firstInvalidFocus: false,//未通过验证的第一个表单元素，是否要获取焦点
+        valid: function () {//点击"下一步"按钮的时候，若表单通过验证，就触发该函数！
+            finishPost();
+        },
+        descriptions: {//输入域通过data-descriptions="name"对应到descriptions中属性名等于name的函数
+            regionId: {
+                required: '请选择小区/村'
+            },
+            siteId: {
+                required: '请选择所属支局'
+            },
+            overDoor: {
+                required: '请选择门头'
+            },
+            serviceCard: {
+                required: '请选择服务功能牌'
+            },
+            device: {
+                required: '请选择助农取款器'
+            },
+            cardMachine: {
+                required: '请选择助刷卡器'
+            },
+            televisor: {
+                required: '请选择电视播放功能'
+            },
+            question:{
+                required: '请输入工作记录'
+            }
+        }
+    });
+</script>
+</body>
+</html>

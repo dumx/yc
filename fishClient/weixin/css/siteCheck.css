@@ -1,0 +1,7 @@
+#checkForm{background:#fff;padding:.448rem;}
+div.clear select{float: left; width: 70%; height: 2.6rem; line-height: 2.6rem;}
+div.clear label{width:30%;}
+div.clear div.radioDiv label{width:17%;}
+div.textArea{height:9.417rem;}
+div.textArea label{width:100%;border-bottom:1px solid #EAEAED;}
+div.clear textarea{width:100%;height:6.726rem;padding:.448rem;border-bottom:1px solid #EAEAED;}

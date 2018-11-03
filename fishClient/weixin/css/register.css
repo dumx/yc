@@ -1,0 +1,30 @@
+
+#registerForm p{color:#333333;height:1.794rem;line-height:1.794rem;background:#fff;}
+/*公用*/
+ div.clear{border-bottom:1px solid #EAEAED;}
+ div.clear div.radioDiv label{float:left;width:22%;text-align:left;padding-left:.224rem;}
+ div.clear label{float:left;width:27%;text-align:left;}
+ div.clear input{float:left;width:70%;height:2.6rem;line-height:2.6rem;}
+ div.mobile input{width:35%;}
+ div.mobile button{float:left;width:35%;height:1.794rem;line-height:1.794rem;}
+ div.clear{height:2.69rem;line-height:2.69rem;}
+ .radioDiv input[type=radio]{width:.807rem;height:.807rem;position:relative;top:.897rem;}
+.personInfo,.addressInfo,.recommendInfo{padding-left:.448rem;padding-right:.448rem;background:#fff;margin-top:.448rem;}
+/*************个人信息填写********************/
+.nameDiv{position:relative;}
+.nameDiv b img{position:relative;top:-.224rem;}
+.nameDiv b,input#file{position:absolute;right:.448rem;top:.673rem;width:1.345rem;height:1.345rem;overflow:hidden;}
+.personInfo .getValid{width:30%;}
+/*************地址信息填写********************/
+.addressInfo div.clear select{width:70%;height:2.6rem;line-height:2.6rem;}
+/*************推荐信息填写********************/
+.postBtn{font-weight:bold;background:#1A5841;width:80%;height:2.242rem;line-height:2.242rem;margin-left:10%;margin-top:1.345rem;margin-bottom:2.242rem;}
+/*验证码*/
+#registerForm #J_getCode{float:none;width:35%;background:#1A5841;color:#fff;height:1.794rem;line-height:1.794rem;margin-right:.448rem;}
+#registerForm #J_resetCode{float:none;}
+/*提示框按钮背景色*/
+.layui-layer-btn .layui-layer-btn0 {
+    border-color: #1AA094;
+    background-color: #1AA094;
+    color: #fff;
+}

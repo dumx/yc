@@ -1,0 +1,158 @@
+{
+  "groups": [
+    {
+      "name": "hub",
+      "type": "com.pay.yc.config.HubProperties",
+      "sourceType": "com.pay.yc.config.HubProperties"
+    },
+    {
+      "name": "hub.alipay",
+      "type": "com.pay.yc.config.HubProperties$Alipay",
+      "sourceType": "com.pay.yc.config.HubProperties",
+      "sourceMethod": "getAlipay()"
+    },
+    {
+      "name": "hub.async",
+      "type": "com.pay.yc.config.HubProperties$Async",
+      "sourceType": "com.pay.yc.config.HubProperties",
+      "sourceMethod": "getAsync()"
+    },
+    {
+      "name": "hub.weixin",
+      "type": "com.pay.yc.config.HubProperties$Weixin",
+      "sourceType": "com.pay.yc.config.HubProperties",
+      "sourceMethod": "getWeixin()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "hub.alipay.ali-appid",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Alipay",
+      "defaultValue": "2017111609968522"
+    },
+    {
+      "name": "hub.alipay.alipay-public-key",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Alipay",
+      "defaultValue": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo/YTNZU7VWQm20xvPdDwMDzhLWdUipSPt2Fd9XQfp3mu8bB7oHBgd31RI3zN7n5y+omuUpqtaguxqc7LJo/DhnLZynR49IkD2nbkuX5zn2h8jNFegSALoLwU2fJc6dnjSxDw9PoORSfHQJXLdQbwlwQYHk6nzr75bs++Fjx/PhgQRY3/8Qhq5+l9LS4aW7i9UwWNy7paL6axMqkinR+3sHtjZWrlemIskqiObvdJ+eQu1KbFopOvT5Xs76dKh1k/A8vfu6lEVcmRi1YDtHUhn0Sp3Nobw1vJh6Z+JpYiaBDleHeuioY8ZNT9SpXVXao4J9zQRkMuBLNLdZ1okJ5+ywIDAQAB"
+    },
+    {
+      "name": "hub.alipay.format",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Alipay",
+      "defaultValue": "JSON"
+    },
+    {
+      "name": "hub.alipay.input-charset",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Alipay",
+      "defaultValue": "utf-8"
+    },
+    {
+      "name": "hub.alipay.log-path",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Alipay"
+    },
+    {
+      "name": "hub.alipay.method",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Alipay",
+      "defaultValue": "alipay.trade.app.pay"
+    },
+    {
+      "name": "hub.alipay.notify-url",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Alipay",
+      "defaultValue": "http://116.62.12.100:8899/w/notifies/alipay"
+    },
+    {
+      "name": "hub.alipay.partner",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Alipay"
+    },
+    {
+      "name": "hub.alipay.private-key",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Alipay",
+      "defaultValue": "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCW8SfQH+IQ32BlVQpRl3do3TWuFJzKOg3tRwPbXa+r3yTnuc2jsrrIIh+ai2z9KStb6EoBwPTmKIdOLPUiypGA9EmthGAubmE157ng34tvASKAM81OabKCHs8yjb+waj7YOrmE2L4wtLGKuYCbUbrGJm2/F6/+J7AXJBY9Pj71du970bB0xj9QKgavwrCAcua4OWYhmrS9tJX97cP1Y34XetwU6dqBxrHpTr5jHS8sbVy2LTDuCcm8Ll/UwPzorWyRIcYVTVd8USCY+cjl7e8rCYhN68gzYwfUTER5YQXuaLZL4rgbnJUsetEkKHgxGh5EgIOF+B2N505+bJbhMYkFAgMBAAECggEAeMxc4XpysLAkdFRforbGkLzgdgX3CPz3IlsAIjJTIgi+f1k60vR5+SseAc/tlJm7Ip2/hLHJDN2Ik671LDfTxNE8mcpkMySRVdOy9d3RuC+/TbynZUa/3tULW1kH/Qa6btBoooHXjCFAKVaWLzd0c5pToGgzqAJZMdvmlHLZbhXbK/irY8XHX65Y9X0p/dyVeyODpT/FfsW1vLG4IEQioq/NqG+jE0Am7Ox/ok2rgt83xt6Lsut2XvthV5MIqhJt95U4XE7S+AVHiz28Ba7Io6UMyBCztLAg4Nr/xOyzjuRe7xipzNSVmuB4bSd1FT/MV0k6f0YTq0f6gxlg0B5jDQKBgQDPry+hR8sjaREKE8RYsCHRaIJnjBk24bI7Fj/LCCFa++idbsn4HbdXM5xG056xKJRZNANp9+Mss4R764ERQ0SvKJzB3AzAHinfiObS0Mvrt+lczEg2dUHDlpUOCuQvkPrEcFh8qXxtE8jytU6MUhFbjJAA/bZ+qbU//pi3uI8j2wKBgQC6DqI/dKqT6a+UdLiQGHu+7NUA5NLlplekWy4ChdSDCxTSlrvIn/3otdisGE9eJRBTfepLA0tdi57I2fm1BeoamY/x92SbODevfIgqcXJmnk8MmYsbcQ+TRzCua3+LPpjTGH15VWeCQ7mHzF2X1nCBv34Nl6miNCvb3nlscJQMnwKBgErgUj/HbomZu7byYXvIJKknELzcWcrbnDKJVv6QM9Zls/vukYqOzCb4SIOQkEo24yU2B3URFiprnnw+8A2VPxIXhkyuVTp+pYIeDXo8JQkbCVuXmwFnTQqDI8IoUxSDJKXmC0EGqgF5fJ1kmKkmfXOQPerdjgokjWBBHjY+p/y5AoGBALHmnCygmRmlMEV69Z6SSoBcY67fHOiJDPQSWwP+gxxp1BcoGZXTpSyF9A9Zj0otlla+5u+izsU7YzAZfDIi3Z1hh8mNC51/O3+IS4qJvyFv7ZXWmrQ6fvIL9/hOwT2bNPVjTVZe2wIrT5MRTcyJNjpZp2XHxmNaDzXEm8WcP3NxAoGAO+JdoNTO52tISe3dGhogBojQOLScNUXtDcaIXWQaw1pjc1AvVGFwHFVu+Vv7XcZqPKDYo5O31SRMxDoY4F2LgmpYZX8WCfrrYwyuKXpeytXb20yxmeZVQk2kyaruvFSA6LKiQEanARWPkKxIxWu8ClA8Xz42PUX5yWYZST97VL4="
+    },
+    {
+      "name": "hub.alipay.public-key",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Alipay",
+      "defaultValue": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlvEn0B/iEN9gZVUKUZd3aN01rhScyjoN7UcD212vq98k57nNo7K6yCIfmots/SkrW+hKAcD05iiHTiz1IsqRgPRJrYRgLm5hNee54N+LbwEigDPNTmmygh7PMo2/sGo+2Dq5hNi+MLSxirmAm1G6xiZtvxev/iewFyQWPT4+9Xbve9GwdMY/UCoGr8KwgHLmuDlmIZq0vbSV/e3D9WN+F3rcFOnagcax6U6+Yx0vLG1cti0w7gnJvC5f1MD86K1skSHGFU1XfFEgmPnI5e3vKwmITevIM2MH1ExEeWEF7mi2S+K4G5yVLHrRJCh4MRoeRICDhfgdjedOfmyW4TGJBQIDAQAB"
+    },
+    {
+      "name": "hub.alipay.refund-server",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Alipay"
+    },
+    {
+      "name": "hub.alipay.seller-id",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Alipay"
+    },
+    {
+      "name": "hub.alipay.sign-type",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Alipay",
+      "defaultValue": "RSA2"
+    },
+    {
+      "name": "hub.alipay.version",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Alipay",
+      "defaultValue": "1.0"
+    },
+    {
+      "name": "hub.async.core-pool-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.pay.yc.config.HubProperties$Async",
+      "defaultValue": 2
+    },
+    {
+      "name": "hub.async.max-pool-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.pay.yc.config.HubProperties$Async",
+      "defaultValue": 50
+    },
+    {
+      "name": "hub.async.queue-capacity",
+      "type": "java.lang.Integer",
+      "sourceType": "com.pay.yc.config.HubProperties$Async",
+      "defaultValue": 10000
+    },
+    {
+      "name": "hub.weixin.appid",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Weixin"
+    },
+    {
+      "name": "hub.weixin.local-cert-url",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Weixin"
+    },
+    {
+      "name": "hub.weixin.mch-id",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Weixin"
+    },
+    {
+      "name": "hub.weixin.notify-url",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Weixin"
+    },
+    {
+      "name": "hub.weixin.package-value",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Weixin"
+    },
+    {
+      "name": "hub.weixin.secret",
+      "type": "java.lang.String",
+      "sourceType": "com.pay.yc.config.HubProperties$Weixin"
+    }
+  ],
+  "hints": []
+}

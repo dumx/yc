@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="10 seconds" debug="false">
+	<jmxConfigurator />
+
+	<property name="APP_NAME" value="zzhbody" />
+	<!--<property name="APPLOG_PATH" value="/var/log/portal" />--><!--服务器地址-->
+
+	<property name="APPLOG_PATH" value="../log/portal" /><!--本地地址-->
+	<appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${APPLOG_PATH}/${APP_NAME}.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<FileNamePattern>${APPLOG_PATH}/${APP_NAME}.%d{yyyy-MM-dd}.log
+			</FileNamePattern>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n
+			</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<appender name="dailyRollingFileErrorAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${APPLOG_PATH}/${APP_NAME}-error.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<FileNamePattern>${APPLOG_PATH}/${APP_NAME}-error.%d{yyyy-MM-dd}.log
+			</FileNamePattern>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n
+			</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter"><!-- 只打印错误日志 -->
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+
+	<!--控制台输出日志-->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+		</encoder>
+	</appender>
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+
+
+	<!-- 自定义日志 -->
+    <logger name="com.zzhsoft.zzhbody" level="INFO" />
+    <logger name="org.springframework" level="WARN" />
+    
+	<root level="INFO">
+		<appender-ref ref="dailyRollingFileAppender" />
+		<appender-ref ref="dailyRollingFileErrorAppender" />
+	</root>
+</configuration>

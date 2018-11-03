@@ -1,0 +1,33 @@
+body{/*padding-top:.448rem;*/}
+.cardDiv{border-bottom:1px solid #EAEAED;height:6.726rem;}
+.cardDiv p{height:1.345rem;line-height:1.345rem;text-align: center;}
+.cardDivItem{float: left;width:31%;height:6.726rem;margin-right:3.5%;}
+.cardDiv .cardDivItem:nth-child(3){margin-right:0;}
+.photoBox{float:left;position:relative;width:100%;height:4.933rem;}
+.photoBox input{position:absolute;left:0;top:0;width:100%;height:5rem;overflow:hidden;display:none;}
+.cardRemove{position:absolute;right:-0.135rem;top:-0.224rem;width:20px;height:20px;}
+.nameDiv{position:relative;}
+.nameDiv b img{position:relative;top:-.224rem;}
+input#busFile{position:absolute;top:0;left:0;width:3.587rem;height:3.587rem;display:none;}
+div.clear label{float:left;width:30%;text-align:left;}
+div.clear select{width:70%;height:2.6rem;line-height:2.6rem;}
+#container{background:#fff;padding-left:.448rem;padding-right:.448rem;}
+div.sitePic{height:6rem;line-height: 6rem;}
+.sameBox{float:left;position:relative;width:5rem;height:5rem;top:.897rem;margin-right:.897rem;}
+.sameBox img.plus,.sameBox img.plus2,.sameBox img.plus_b{position:absolute;left:0;top:0;}
+.photoBox img.plus_z,.photoBox img.plus_f,.photoBox img.plus_h{position:absolute;left:0;top:0;}
+#photoPeo,#photoNat,#photoHand{position:absolute;top:0;left:0;width:4.933rem;height:4.933rem;display:none;}
+#innerPic,#outerPic{position:absolute;top:0;left:0;width:3.587rem;height:3.587rem;display:none;}
+.picRemove{position:absolute;right:-0.224rem;top:-0.224rem;width:.673rem;height:.673rem;}
+.reportBtn{color:#fff;font-weight:bold;width:94%;height:2.242rem;line-height:2.242rem;margin:1.345rem 0 3.587rem 3%;background:#1A5841;}
+/*头部切换*/
+.reportTitle li{width:50%;height:2.242rem;line-height:2.242rem;color:#666;text-align:center;float:left;border-bottom:1px solid #eee;background:#fff;margin-bottom:.448rem;}
+/*手机号*/
+#J_getCode {
+    float: none;
+    width: 34%;
+    background: #1A5841;
+    color: #fff;
+    height: 1.794rem;
+    line-height: 1.794rem;}
+div.mobile button.reset-code{width: 34%;height: 1.794rem;line-height: 1.794rem;}

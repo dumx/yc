@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- H5页面窗口自动调整到设备宽度，并禁止用户缩放页面-->
+    <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,user-scalable=no">
+    <!--当网站添加到主屏幕快速启动方式，可隐藏地址栏，仅针对ios的safari-->
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <!--将网站添加到主屏幕快速启动方式，仅针对ios的safari顶端状态条的样式-->
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <!--忽略将页面中的数字识别为电话号码-->
+    <meta content="telephone=no" name="format-detection">
+    <!--忽略Android平台中对邮箱地址的识别-->
+    <meta content="email=no" name="format-detection">
+    <title>综评站点会员注册中心</title>
+    <link rel="stylesheet" type="text/css" href="../css/media.css">
+    <link rel="stylesheet" type="text/css" href="../js/layer/theme/default/layer.css">
+    <link rel="stylesheet" type="text/css" href="../css/validate.css">
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
+    <link rel="stylesheet" type="text/css" href="../css/register.css">
+</head>
+<body>
+<form id="registerForm" method="post" enctype="multipart/form-data">
+    <!--个人信息填写-->
+    <div class="personInfo">
+        <div class="infoPart">
+            <p class="personTitle">个人信息填写</p>
+            <div class="clear nameDiv">
+                <label for="name">姓名</label>
+                <input type="text" name="name" id="name" placeholder="请输入姓名" data-required="true"
+                       data-descriptions="name">
+                <b><img id="pic" src="../images/camera.png"></b>
+                <input style="display: none" type="file" name="file" id="file" accept="image/*" class="camera">
+            </div>
+            <div class="clear">
+                <label for="idCard">身份证号</label>
+                <input type="text" name="idCard" id="idCard" placeholder="请输入身份证号" data-required="true"
+                       data-descriptions="idcard">
+            </div>
+            <div class="clear">
+                <label>性别</label>
+                <div class="radioDiv">
+                    <input type="radio" value="0" checked name="sex" id="male"><label class="same" for="male">男</label>
+                    <input type="radio" value="1" name="sex" id="female"><label class="same" for="female">女</label>
+                </div>
+            </div>
+            <div class="clear mobile">
+                <label for="mobile">手机号</label>
+                <input type="text" name="mobile" id="mobile" placeholder="请输入手机号" data-required="true"
+                       data-pattern="^[1][3,4,5,7,8][0-9]{9}$" data-descriptions="mobile">
+                <input type="button" class="getValid get-code" id="J_getCode" onclick="getCode(this)" value="获取验证码">
+                <button class="reset-code" id="J_resetCode" style="display:none;"><span id="J_second">60</span>秒后重新获取
+                </button>
+            </div>
+            <div class="clear">
+                <label for="code">验证码</label>
+                <input type="hidden" id="phoneCode">
+                <input type="text" id="code" placeholder="请输入验证码" name="mobileMessageCode" data-required="true"
+                       data-descriptions="code">
+            </div>
+        </div>
+    </div>
+    <!--地址信息填写-->
+    <div class="addressInfo">
+        <div class="addressPart">
+            <p>地址信息填写</p>
+            <div class="clear">
+                <label for="city">市</label>
+                <select id="city" onchange="getCounty();"></select>
+            </div>
+            <div class="clear">
+                <label for="county">区/县</label>
+                <select id="county" onchange="getTown();">
+                </select>
+            </div>
+            <div class="clear">
+                <label for="town">街道/乡镇</label>
+                <select id="town" onchange="getVillage();">
+                </select>
+            </div>
+            <div class="clear">
+                <label for="village">小区/村</label>
+                <select id="village" data-required="true" name="regionId" data-descriptions="regionId"
+                        onchange="getSite();">
+                </select>
+            </div>
+            <div class="clear">
+                <label for="subofficeSite">所属支局</label>
+                <select id="subofficeSite" data-required="true" name="siteId" data-descriptions="subofficeSite">
+                </select>
+            </div>
+            <div class="clear">
+                <label for="code">详细地址</label>
+                <input type="text" id="address" placeholder="请输入详细地址" >
+            </div>
+        </div>
+    </div>
+    <!--推荐信息填写-->
+    <div class="recommendInfo">
+        <!--邮政职工-->
+        <div class="workerPart">
+            <p>推荐信息填写</p>
+            <div class="clear">
+                <label>推荐人类型</label>
+                <div class="radioDiv">
+                    <input type="radio" value="1" checked name="referrer" id="postalMan">
+                    <label class="same" for="postalMan">邮政人员</label>
+                    <input type="radio" value="2" name="referrer" id="referrer">
+                    <label class="same" style="width:28%;" for="referrer">便民服务站</label>
+                </div>
+            </div>
+            <div class="clear">
+                <label for="memberReferrer">姓名</label>
+                <input type="text" name="referrerName" id="memberReferrer" placeholder="请填写姓名" data-required="true"
+                       data-descriptions="referrerName">
+            </div>
+        </div>
+    </div>
+    <div>
+        <button type="submit" class="postBtn">提&nbsp;交</button>
+    </div>
+</form>
+<script type="text/javascript" src="../js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript"  src="../js/layer/layer.js"></script>
+<script type="text/javascript"  src="../js/jquery-mvalidate.js"></script>
+<script>document.write("<script type='text/javascript' src=../../static/js/app.js?t=" + Date.now() + "'><\/script>")</script>
+<script>document.write("<script type='text/javascript' src=" + Date.now() + "../js/register.js?t='><\/script>")</script>
+</body>
+</html>

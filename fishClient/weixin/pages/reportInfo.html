@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- H5页面窗口自动调整到设备宽度，并禁止用户缩放页面-->
+    <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,user-scalable=no">
+    <!--当网站添加到主屏幕快速启动方式，可隐藏地址栏，仅针对ios的safari-->
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <!--将网站添加到主屏幕快速启动方式，仅针对ios的safari顶端状态条的样式-->
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <!--忽略将页面中的数字识别为电话号码-->
+    <meta content="telephone=no" name="format-detection">
+    <!--忽略Android平台中对邮箱地址的识别-->
+    <meta content="email=no" name="format-detection">
+    <link rel="stylesheet" type="text/css" href="../css/media.css">
+    <link rel="stylesheet" type="text/css" href="../js/layer/theme/default/layer.css">
+    <link rel="stylesheet" type="text/css" href="../css/validate.css">
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
+    <link rel="stylesheet" type="text/css" href="../css/register.css">
+    <link rel="stylesheet" type="text/css" href="../css/reportInfo.css">
+    <style>
+        body {
+            background: #F8F8F8;
+        }
+        /* 位置上报css*/
+        #container2 {
+            display: none;
+        }
+        #container2 li div.radioContainer {
+            height: 4.484rem;
+            line-height: 2.242rem;
+            border: 1px solid #B4B4B4;
+            border-radius: .359rem;
+            -o-border-radius: .359rem;
+            -moz-border-radius: .359rem;
+            -webkit-border-radius: .359rem;
+        }
+        #container2 li div.radioContainer div.radioDiv:nth-child(1) {
+            border-bottom: 1px solid #B4B4B4;
+        }
+        #container2 li input {
+            width: 100%;
+            padding-left: .448rem;
+            height: 2.242rem;
+            line-height: 2.242rem;
+            border: 1px solid #B4B4B4;
+        }
+        #container2 li input[type=radio] {
+            width: .807rem;
+            height: .807rem;
+            vertical-align: middle;
+            position: relative;
+            top: -0.09rem;
+            margin-left: .448rem;
+            margin-right: .448rem;
+        }
+        #opDiv {
+            width: 100%;
+            height: 30%;
+            top: 70%;
+        }
+        #opDiv div {
+            position: relative;
+            width: 96%;
+            margin-left: 2%;
+            height: 50%;
+            display: table;
+            border-bottom: 1px solid #ECECEC;
+        }
+        #opDiv div span, #opDiv div img {
+            display: table-cell;
+            vertical-align: middle;
+        }
+        #opDiv div img {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto 80%;
+            width: 2.69rem;
+            height: 2.69rem;
+        }
+    </style>
+</head>
+<body>
+<form id="reportInfoForm" method="post" enctype="multipart/form-data">
+    <div id="container">
+        <div class="clear nameDiv">
+            <label for="bossName">姓名</label>
+            <input readonly type="text" name="bossName" id="bossName" placeholder="请输入姓名" data-required="true"
+                   data-descriptions="bossName">
+        </div>
+        <div class="clear mobile">
+            <label for="bossPhone">手机号</label>
+            <input type="text" name="bossPhone" id="bossPhone" placeholder="请输入手机号" data-required="true"
+                   data-pattern="^[1][3,4,5,7,8][0-9]{9}$" data-descriptions="bossPhone">
+            <input type="button" class="getValid get-code" id="J_getCode" onclick="getCode(this)" value="获取验证码">
+            <button class="reset-code" id="J_resetCode" style="display:none;float:none;"><span id="J_second">60</span>秒后重新获取
+            </button>
+        </div>
+        <div class="clear">
+            <label for="messageCode">验证码</label>
+            <input type="text" id="messageCode" name="messageCode" placeholder="请输入验证码" data-required="true"
+                   data-descriptions="messageCode">
+        </div>
+        <div class="clear sitePic">
+            <label for="busFile">营业执照</label>
+            <input type="hidden" id="businessAtt" name="businessAttId">
+            <input type="hidden" id="validDate" name="validDate">
+            <input type="hidden" id="siteName" name="siteName">
+            <div class="sameBox picBus">
+                <img class="plus_b" src="../images/plus.png">
+                <input type="file" name="busFile" id="busFile" accept="image/*"
+                       data-required="true" data-descriptions="busFile" onclick="changeBus()"/>
+            </div>
+        </div>
+        <div style="height:20%;">
+            <input type="hidden" id="longitude" name="longitude">
+            <input type="hidden" id="latitude" name="latitude">
+            <button type="submit" class="reportBtn">提&nbsp;交</button>
+        </div>
+    </div>
+    </ul>
+</form>
+<script type="text/javascript" src="../js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="../js/layer/layer.js"></script>
+<script type="text/javascript" src="../js/jquery-mvalidate.js"></script>
+<script type="text/javascript" src="../js/jquery.exif.js"></script>
+<script type="text/javascript" src="../js/reportInfo.js"></script>
+<script type="text/javascript" src="../../public/js/app.js"></script>
+<script type="text/javascript">
+    var wh=$(window).height();
+    $("#container2").css("height",wh);
+</script>
+</body>
+</html>

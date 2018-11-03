@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- H5页面窗口自动调整到设备宽度，并禁止用户缩放页面-->
+    <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,user-scalable=no">
+    <!--当网站添加到主屏幕快速启动方式，可隐藏地址栏，仅针对ios的safari-->
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <!--将网站添加到主屏幕快速启动方式，仅针对ios的safari顶端状态条的样式-->
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <!--忽略将页面中的数字识别为电话号码-->
+    <meta content="telephone=no" name="format-detection">
+    <!--忽略Android平台中对邮箱地址的识别-->
+    <meta content="email=no" name="format-detection">
+    <title>便民站位置上报</title>
+    <link rel="stylesheet" type="text/css" href="../css/media.css">
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
+    <style>
+        body, html{width:100%;height:100%;overflow: hidden;margin:0;}
+        #mapContainer{width:100%;height:70%;position:relative;overflow: hidden;margin:0;}
+        #allmap{margin:0 0 3px;height:100%;}
+        #mapContainer p{position:absolute;left:0;bottom:0;width:100%;background:rgba(0,0,0,.6);text-align:left;padding:.448rem;color:#fff;z-index:10000;}
+        #opDiv{width:100%;height:30%;top:70%;}
+        #opDiv div{position:relative;width:96%;margin-left:2%;height:50%;display:table;border-bottom:1px solid #ECECEC;}
+        #opDiv div span,#opDiv div img{display:table-cell;vertical-align:middle;}
+        #opDiv div img{position:absolute;top:0;bottom:0;left:0;right:0;margin:auto 80%;width:2.69rem;height:2.69rem;}
+    </style>
+</head>
+<body>
+    <div id="mapContainer">
+        <div id="allmap"></div>
+        <p>便民站位置上报</p>
+    </div>
+    <div id="opDiv">
+        <div onclick="skipReport();"><span>便民站门头照片上报（请先位置上报）</span><img id="myPic"></div>
+        <div><span>我的电子地图</span><img id="ePic"></div>
+    </div>
+<!--<script type="text/javascript" src="http://api.map.baidu.com/getscript?v=2.0&ak=85zBqdyVvQFuR0ejjFA1nYxK7xDc5Te3"></script>-->
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.10&key=a0ae1632c448781f0b69b3c338a809b0"></script>
+<script src="../js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript">
+    ////////////////////////////////高德定位////////////////////////////////
+    $(function(){//设置定位按钮位置
+        $(".amap-geolocation-con").css({
+            'position': 'absolute',
+            'z-index': 9999,
+            'right': '.448rem',
+            'bottom': '2.242rem'
+        })
+    });
+    //地图定位
+    var map = new AMap.Map('allmap', {
+        resizeEnable: true
+    });
+    AMap.plugin('AMap.Geolocation', function() {
+        var geolocation = new AMap.Geolocation({
+           enableHighAccuracy: true,//是否使用高精度定位，默认:true
+           timeout: 10000,          //超过10秒后停止定位，默认：5s
+           buttonPosition:'RB',    //定位按钮的停靠位置
+           buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+           zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
+        });
+        map.addControl(geolocation);
+        geolocation.getCurrentPosition(function(status,result){
+            if(status=='complete'){
+                onComplete(result)
+            }else{
+                onError(result)
+            }
+        });
+    });
+    //解析定位结果
+    function onComplete(data) {
+        var address = [data.position.getLng(), data.position.getLat()];
+        // 定位信息解析成地址
+        var geocoder = new AMap.Geocoder({//地理编码
+            city: "010"//城市，默认：“全国”
+        });
+        geocoder.getAddress(address, function (status, result) {
+            if (status == 'complete') {
+                var marker = new AMap.Marker({
+                    map: map
+                    //bubble: true
+                });
+                marker.setPosition(address);
+                marker.setMap(map);
+                // 设置鼠标划过点标记显示的文字提示
+                marker.setTitle(result.regeocode.formattedAddress);
+                // 设置label标签
+                marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
+                    offset: new AMap.Pixel(20, 20),//修改label相对于maker的位置
+                    content: ""+result.regeocode.formattedAddress
+                });
+
+            } else {
+                layer.msg('无法获取地址');
+            }
+        })
+    }
+    //解析定位错误信息
+    function onError(data) {
+        layer.msg('定位失败');
+    }
+    ////////////////////////////////百度定位////////////////////////////////
+    /*
+    // 创建Map实例
+    var map= new BMap.Map("allmap");
+    var point = new BMap.Point(116.331398,39.897445);
+    map.centerAndZoom(point,12);
+
+    var geolocation = new BMap.Geolocation();
+    geolocation.getCurrentPosition(function(r){console.log(r.point)
+        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+            var mk = new BMap.Marker(r.point);
+            map.addOverlay(mk);//标出所在地
+            map.panTo(r.point);//地图中心移动*!/
+            var marker = new BMap.Marker(r.point); // 创建标注
+            map.addOverlay(marker);
+
+            var point = new BMap.Point(r.point.lng,r.point.lat);//用所定位的经纬度查找所在地省市街道等信息
+            var gc = new BMap.Geocoder();
+            gc.getLocation(point, function(rs){
+                console.log('123='+JSON.stringify(rs));
+                var addComp = rs.addressComponents; console.log(rs.address);//地址信息
+                alert(rs.address);//弹出所在地址
+                //创建Label
+                var label = new BMap.Label(rs.address, {
+                    offset: new BMap.Size(15, -25)
+                });
+                marker.setLabel(label); //为标注添加一个标签
+                map.panTo(r.point);//地图中心移动
+            });
+        }else {
+            alert('failed'+this.getStatus());
+        }
+    },{enableHighAccuracy: true})*/
+
+    ////////////////////////////////微信定位（有问题）////////////////////////////////
+    /*wx.config({
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: '${appId}', // 必填，公众号的唯一标识
+        timestamp: '${ timestamp}' , // 必填，生成签名的时间戳
+        nonceStr: '${ nonceStr}', // 必填，生成签名的随机串
+        signature: '${ signature}',// 必填，签名，见附录1
+        jsApiList: [
+            'getLocation' //获取地理位置接口
+        ]
+    });
+    wx.ready(function(){
+        wx.getLocation({
+            type: 'wgs84',
+            complete:function(argv){
+                if(argv.errMsg=="getLocation:fail"){
+                    alert("123="+JSON.stringify(res));
+                    var gc = new BMap.Geocoder();
+                    var pointAdd = new BMap.Point(res.longitude, res.latitude);
+                    gc.getLocation(pointAdd, function(rs){
+                            var city = rs.addressComponents.city;
+                            alert(city);
+                        }
+                    );
+                }else{
+                    alert("ok");
+                }
+            },
+            cancel: function (res) {
+                alert('用户拒绝授权获取地理位置');
+            }
+        });
+    });
+    wx.error(function (res) {
+        alert(123);
+        alert("调用微信jsapi返回的状态:"+res.errMsg);
+    });*/
+
+    //上传位置
+    function skipReport(){
+        location.href='reportLocation.html';
+    }
+</script>
+</body>
+</html>

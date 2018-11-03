@@ -1,0 +1,52 @@
+spring.profiles.active: test
+
+name: yc
+
+management:
+  security:
+    enabled: false
+
+spring:
+  datasource:
+     url: jdbc:mysql://127.0.0.1:3306/yc?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false
+     driver-class-name: com.mysql.jdbc.Driver
+     username: root
+     password: root
+     test-while-idle: true
+     max-wait-millis: 30000
+     validation-query: 'SELECT 1'
+     time-between-eviction-runs-millis: 20000
+     min-evictable-idle-time-millis: 28700
+  jpa:
+     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+     hibernate.ddl-auto: update 
+     hibernate.show-sql: true
+
+pay:
+  alipay:
+     ali_appid: 2018092761536574
+     private_key: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCvpmo2Rf0Qibg+/PnHqxdG4z+qPl0WOMNbnWPKCQqKLWd2HnSz+J4DaYsW8w+vmAeLlkqh/mthzi1ZVnYSuetb+OZRjJHZRZGZjwnFGmccUOPFnI3S9nO78/Tn/B8Pd2N1zFw6U64BPXDvr1yBJiZu6T336PT5pVxO8nwGSmcI87fYzPPWY7xBe+hi7+3ibuYtBwGKe7QYxXYIV0UAw+lPn81uEfD+0asiFy965SeCyy2KqpxmpMiz8PXsPTtpv3L7jVDi4anW/hzeq9EPBPozoYyejfrpdsWsZ1D+JVZ6Hv/4maCOE2mL6TbJAZ1JexlcVkbXTBx4JG/X0yUyPaujAgMBAAECggEBAKqmHDRkZMuHcWhIsIdK8o9dQsIsWpW3Sh0c2RE1HXdHS2gXiLw8w49/H7GJLWkkY9g6iIG/wyW/gJF2Dbp9xGqTc3gxAJW9IAq3S/+heiGpeNDJG4SlCaXGCt7DNI37KLcOd1/3Ymsz/R/wGAglP1ur4ReUzUQpYngU32fhKx8mwOhGdPX0hv6TVpa9/3YNwpwiNaFcb/dacfJBDR4QVnVnxoadm8hQEg6vaKtlnYZJJreUL1P/JayuFdmiiszR8hHlbyMgYmJcPVtORN6V3nlJKM221syAAqfD+P5oiXCyloa8MHpW7+6lgmk4jtl8F69YpIz0uk0Le9BOvBnBwVkCgYEA9K3b8fKxak5CnTzrPHvOXwt4xl/FOkY8n3lONkSA3K/o+LsWsmcXWXcm/axmCCnuKmrOgB8MapnwY3SCwesv55VX4Zph72jElFFzQxwXWQjXyuyigZinqX754Zf3kRhjACohyc3hKTCZ08oKbb2S/FPGjmYYDZItWHfLj82XO60CgYEAt8buCw8V7amB7R/1+fxeMTOnQbfewvu7j8nC4ym2+aOqYhWalw0+l/Acq3X11ken+sVFQFcfAEF+hHgGPQKPb7i7HibiUSeG3TNbQI048tF5daDjw6LoZ0nY2SlKqw2xubythJksjZI/KsaqDY00olQzcEG43zXGvktEyd97bo8CgYBU83Aj5uFWSWmzcg0yaMHUGgWKyoGNpAk0TUesa8hZ1vGKOlq9AjIHK+lrtcmPGA/Kxl5/+Ue0U1I1FaS4c1GklCN4/sL1/mgSHt1n9X7duMZDfDlHyZqcrKtRehPIWrE0w2wLxuFgDbG66LEKPQGlfei4VBYR0CjSSHVyrizN2QKBgQCeOP8pNkvC2nWqGiJEoCrYYYhW5F89sE3Ddgn8WiXWuDoxSDhYZGbHmUqVtHF7kyXkmYMN6fQe3ER4+H0medXUck9nnkKrbESInXarFOs6426W/3YZMWC1zLaOASbwLlIdf3xE9TuOh6MqyPAPysrOF4BR3cO1KS97FoKa63XxsQKBgAPTCbIES1wJQk6SjQuOdPsNBjZWglRy1ba0a/1xr6iczUPN4h74ASIRD2pWhOEHnUFfYHaGDImh1Fx3sWGCVrO+fOLN9EfReeqBK4UtUzOd0dTNZwIVa3FG6b8cRLxKWG5Bks5CQ0NK6NmcyIoSe3NFTTM4YyOz52k3i8hfy1i7
+     public_key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAr6ZqNkX9EIm4Pvz5x6sXRuM/qj5dFjjDW51jygkKii1ndh50s/ieA2mLFvMPr5gHi5ZKof5rYc4tWVZ2ErnrW/jmUYyR2UWRmY8JxRpnHFDjxZyN0vZzu/P05/wfD3djdcxcOlOuAT1w769cgSYmbuk99+j0+aVcTvJ8BkpnCPO32Mzz1mO8QXvoYu/t4m7mLQcBinu0GMV2CFdFAMPpT5/NbhHw/tGrIhcveuUngsstiqqcZqTIs/D17D07ab9y+41Q4uGp1v4c3qvRDwT6M6GMno366XbFrGdQ/iVWeh7/+JmgjhNpi+k2yQGdSXsZXFZG10wceCRv19MlMj2rowIDAQAB
+     alipay_public_key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo8XHEtSuocdQz38h9g5Q47AmFeyT+pB4eUyiMv15NjhHkZIetKDZW+O8ZAdTGza4zxIBExswEAiZLZUMagqmcW6sr5oMwBjboMFr4zjvpUt4v3EkSnUThAuVm2n8/MUkM1TOtK5XqfmZ30BC1a06UynHdgWqaqbPYgOtOQkhLtNSmGOcWWNtr3VkOChQ/dBC/RPrEF69M16tAgd6I5XdqBIKffjkIi5tyXzOTv/DedhnOTzOG15/oV6qoEBzQglZGWNjP4rlcyyw8kJRWa4AoPoLoWBJeAbpByoiYMrfS7++zwQX8UjwByDEIqC+1nB3x9yNWyutcBjVpXIqn6HUpQIDAQAB
+     sign_type: RSA2
+     input_charset: utf-8
+     format: JSON
+     version: 1.0
+     method: alipay.trade.wap.pay
+     notify_url: http://116.62.70.116:8899/w/notifies/alipay
+  weixin:
+     appid: wx95e739344708f031
+#     mchid: 1493083912
+     secret: adb059bedcc64b759350a5014b2907ed
+     notifyurl: http://116.62.70.116
+
+#management:
+#  security:
+#    enabled: false
+
+logging:
+  config: classpath:logback.xml
+
+server:
+  port: 8888
+  contextPath:
