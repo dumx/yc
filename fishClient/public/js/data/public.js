@@ -1,5 +1,5 @@
 /**
- * 公共参数
+ * 公共参数1
  * @type {string}
  */
 var fromurl="http://fish.zwkjsoft.com/index.html";
