@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 /**
  * 支付预下单
  *
@@ -92,6 +94,7 @@ public class UnifiedOrderController {
         //签名信息在Service中添加。
         unifiedOrder.setType(PaymentOrderType.WEIXIN);
         unifiedOrder.setStatus(PaymentTradeStatus.WATING);//创建订单默认状态为waiting
+        unifiedOrder.setCreateTime(new Date());
         this.unifiedOrderRepository.save(unifiedOrder);
 
         wxParamBean.setOrderNo(orderNo);
