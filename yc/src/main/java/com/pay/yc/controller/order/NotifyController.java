@@ -104,13 +104,6 @@ public class NotifyController {
     }
 
 
-    @ApiOperation(value = "测试 支付宝异步通知")
-    @RequestMapping(value = "/alipay_test")
-    public Object alipayConback_test(@RequestBody String alipayNotifyBean) {
-        log.info("测试 支付宝回调通知!" + alipayNotifyBean);
-        return "success";
-    }
-
     private boolean isPaySuccess(String status) {
         return (PaymentConstant.TRADE_FINISHED.equals(status) || PaymentConstant.TRADE_SUCCESS.equals(status));
     }
