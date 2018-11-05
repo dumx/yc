@@ -83,7 +83,6 @@ public class NotifyController {
             returnBean.setReturn_msg("支付失败");
             return xStreamResult.toXML(returnBean);
         }
-        log.info("微信回调参数:----------------------------"+weixinNotifyBean.toString());
         log.info("微信回调参数:----------------------------"+ JsonUtils.toJson(weixinNotifyBean));
         //验证签名
         final String returnSign = this.weixinNotifyService.generateReturnSign(weixinNotifyBean, wxPayConfig);
