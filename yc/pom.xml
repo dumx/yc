@@ -345,10 +345,10 @@
             </activation>
             <properties>
                 <profiles.active>dev</profiles.active>
-                <datasource.url>jdbc:mysql://127.0.0.1:3306/yc?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;useSSL=false</datasource.url>
+                <datasource.url>jdbc:mysql://%%%%%%%%%%:3306/yc?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;useSSL=false</datasource.url>
                 <datasource.driver>com.mysql.jdbc.Driver</datasource.driver>
                 <datasource.username>root</datasource.username>
-                <datasource.password>root</datasource.password>
+                <datasource.password>caonidaye..</datasource.password>
                 <datasource.jpa.ddl-auto>update</datasource.jpa.ddl-auto>
                 <datasource.jpa.show-sql>true</datasource.jpa.show-sql>
                 <logging.path>/var/log/sms</logging.path>
@@ -357,31 +357,6 @@
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>uat</id>
-            <properties>
-                <profiles.active>uat</profiles.active>
-                <datasource.url>jdbc:mysql://127.0.0.1:3307/yc?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;useSSL=false</datasource.url>
-                <datasource.driver>com.mysql.jdbc.Driver</datasource.driver>
-                <datasource.username>root</datasource.username>
-                <datasource.password>root</datasource.password>
-                <datasource.jpa.ddl-auto>update</datasource.jpa.ddl-auto>
-                <datasource.jpa.show-sql>false</datasource.jpa.show-sql>
-                <logging.path>/var/log/sms</logging.path>
-                <logging.level>INFO</logging.level>
-            </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                    <scope>provided</scope>
                 </dependency>
                 <dependency>
                     <groupId>mysql</groupId>
