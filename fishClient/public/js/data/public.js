@@ -4,3 +4,4 @@
  */
 var fromurl="http://fish.zwkjsoft.com/index.html";
 
+var tokenKey="Authentication";
