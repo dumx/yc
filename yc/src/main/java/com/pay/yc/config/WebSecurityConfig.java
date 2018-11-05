@@ -56,6 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/w/notifies/weixin").permitAll()
                 //微信授权接口权限
                 .antMatchers("/wx/**").permitAll()
+                .antMatchers("/order/unifiedOrders/weixin").permitAll()
                 //导出权限
                 .antMatchers("/wdo/export/**").permitAll()
 

@@ -15,6 +15,7 @@ import com.pay.yc.repository.order.UnifiedOrderRepository;
 import com.pay.yc.repository.order.WeixinUnifiedOrderRepository;
 import com.pay.yc.service.order.WeixinNotifyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,9 @@ public class WeixinNotifyServiceImpl implements WeixinNotifyService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Value(value = "${pay.weixin.key}")
+    private String key;
+
     @Override
     public WeixinUnifiedOrder toUpdateNotifyModel(final WeixinNotifyBean weixinNotifyBean) {
         final String orderNo = weixinNotifyBean.getOutTradeNo();
@@ -72,7 +76,7 @@ public class WeixinNotifyServiceImpl implements WeixinNotifyService {
         uifiedOrder.setStatus(PaymentTradeStatus.SUCCESS);
         uifiedOrder.setType(PaymentOrderType.WEIXIN);
         uifiedOrder.setFinishTime(new Date());
-        uifiedOrder.setState(Constants.NOTCOMPLETED);
+        uifiedOrder.setState(Constants.COMPLETED);
 
         final String retMessage = this.setPayStatusToStack(model);
         //更新业务订单表支付信息
@@ -120,26 +124,10 @@ public class WeixinNotifyServiceImpl implements WeixinNotifyService {
         // 生成签名  顺序已经按照key的大小排序了(必须按ASCII码的顺序排序)。
         final StringBuffer signSrc = new StringBuffer();
         signSrc.append("appid=").append(WeixinNotifyBean.getAppid()).append("&");
-        if (WeixinNotifyBean.getAttach() != null) {
-            signSrc.append("attach=").append(WeixinNotifyBean.getAttach()).append("&");
-        }
+
         signSrc.append("bank_type=").append(WeixinNotifyBean.getBankType()).append("&");
         signSrc.append("cash_fee=").append(WeixinNotifyBean.getCashFee()).append("&");
-        if (WeixinNotifyBean.getCashFeeType() != null) {
-            signSrc.append("cash_fee_type=").append(WeixinNotifyBean.getCashFeeType()).append("&");
-        }
-        if (WeixinNotifyBean.getDeviceInfo() != null) {
-            signSrc.append("device_info=").append(WeixinNotifyBean.getDeviceInfo()).append("&");
-        }
-        if (WeixinNotifyBean.getErrCode() != null) {
-            signSrc.append("err_code=").append(WeixinNotifyBean.getErrCode()).append("&");
-        }
-        if (WeixinNotifyBean.getErrCodeDes() != null) {
-            signSrc.append("err_code_des=").append(WeixinNotifyBean.getErrCodeDes()).append("&");
-        }
-        if (WeixinNotifyBean.getFeeType() != null) {
-            signSrc.append("fee_type=").append(WeixinNotifyBean.getFeeType()).append("&");
-        }
+        signSrc.append("fee_type=").append(WeixinNotifyBean.getFeeType()).append("&");
         if (WeixinNotifyBean.getIsSubscribe() != null) {
             signSrc.append("is_subscribe=").append(WeixinNotifyBean.getIsSubscribe()).append("&");
         }
@@ -149,15 +137,16 @@ public class WeixinNotifyServiceImpl implements WeixinNotifyService {
         signSrc.append("out_trade_no=").append(WeixinNotifyBean.getOutTradeNo()).append("&");
         signSrc.append("result_code=").append(WeixinNotifyBean.getResultCode()).append("&");
         signSrc.append("return_code=").append(WeixinNotifyBean.getReturnCode()).append("&");
-        if(WeixinNotifyBean.getReturnMsg()!=null){
-            signSrc.append("return_msg=").append(WeixinNotifyBean.getReturnMsg()).append("&");
-        }
+//        if(WeixinNotifyBean.getReturnMsg()!=null){
+//            signSrc.append("return_msg=").append(WeixinNotifyBean.getReturnMsg()).append("&");
+//        }
         signSrc.append("time_end=").append(WeixinNotifyBean.getTimeEnd()).append("&");
         signSrc.append("total_fee=").append(WeixinNotifyBean.getTotalFee()).append("&");
         signSrc.append("trade_type=").append(WeixinNotifyBean.getTradeType()).append("&");
         signSrc.append("transaction_id=").append(WeixinNotifyBean.getTransactionId()).append("&");
         //设置密钥
-        signSrc.append("key=").append(wxPayConfig.getSecret());
+//        signSrc.append("key=").append(wxPayConfig.getSecret());
+        signSrc.append("key=").append(key);
         final String returnSignInfo = signSrc.toString();
         return MD5Util.toMD5String(returnSignInfo).toUpperCase();
     }

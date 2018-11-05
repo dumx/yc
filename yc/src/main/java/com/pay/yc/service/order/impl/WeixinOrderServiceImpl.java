@@ -11,6 +11,7 @@ import com.pay.yc.common.util.CustomRuntimeException;
 import com.pay.yc.common.util.JsonUtils;
 import com.pay.yc.common.util.order.UniformOrderGeneratorUtil;
 import com.pay.yc.config.WxPayConfig;
+import com.pay.yc.constants.Constants;
 import com.pay.yc.constants.PaymentConstant;
 import com.pay.yc.model.order.WeixinUnifiedOrder;
 import com.pay.yc.paysign.MD5;
@@ -40,6 +41,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -64,6 +66,12 @@ public class WeixinOrderServiceImpl implements WeixinOrderService {
     @Value(value = "${pay.weixin.notifyurl}")
     private String notifyurl;
 
+    @Value(value = "${pay.weixin.key}")
+    private String key;
+
+    @Value(value = "${pay.weixin.tradeType}")
+    private String tradeType;
+
     /**
      * 微信预下单
      *
@@ -77,19 +85,21 @@ public class WeixinOrderServiceImpl implements WeixinOrderService {
 
         final WeixinUnifiedOrder order = new WeixinUnifiedOrder();
         order.setAppId(wxPayConfig.getAppId());
-        //签名信息在Service中添加。
-        order.setOrderNo(wxParamBean.getOrderNo());
-        order.setType(PaymentOrderType.WEIXIN);
-        order.setNonceStr(UniformOrderGeneratorUtil.getRandomStringByLength(32));
-        order.setSpbill_create_ip(wxParamBean.getSpbillCreateIp());
-        order.setStatus(PaymentTradeStatus.WATING);//创建订单默认状态为waiting
-        
         //需要使用统一订单生成器
         order.setOrderNo(wxParamBean.getOrderNo());
+        //金额
         order.setTotalFee(wxParamBean.getTotalFee());
-//        order.setTimeEnd(new Date());
+        //标题
         order.setSubject(wxParamBean.getSubject());
-        
+        //微信公众号内支付需传openId
+        order.setOpenId(wxParamBean.getOpenId());
+        order.setNonceStr(UniformOrderGeneratorUtil.getRandomStringByLength(32));
+        order.setSpbill_create_ip(wxParamBean.getSpbillCreateIp());
+
+        //签名信息在Service中添加。
+        order.setType(PaymentOrderType.WEIXIN);
+        order.setStatus(PaymentTradeStatus.WATING);//创建订单默认状态为waiting
+
         // 调用微信服务器获取预支付信息
         final WxPayPrePayBean prePayBean = this.fetchPrePayBean(order, wxPayConfig);
         if (prePayBean == null) {
@@ -101,8 +111,7 @@ public class WeixinOrderServiceImpl implements WeixinOrderService {
         order.setTimestamp(String.valueOf(new Date().getTime() / 1000));
         final String sign = this.generateSignForApp(
                 order.getTimestamp(),
-                prePayBean,
-                wxPayConfig.getSecret());
+                prePayBean);
         order.setSign(sign);
 
         //如果该订单号交易流水已存在,则不新建交易流水
@@ -151,21 +160,30 @@ public class WeixinOrderServiceImpl implements WeixinOrderService {
 //    }
 
     /**
+     * 固定千万级用户量 生成订单随机数
+     */
+    public static String haoAddOne(String userId){
+        Integer nineNo = Integer.parseInt(userId);
+        nineNo++;
+        DecimalFormat df = new DecimalFormat(Constants.STR_FORMAT);//千万级用户量
+        return df.format(nineNo);
+    }
+
+    /**
      * 返回给APP端的sign
      *
      * @param timeStamp
      * @param resultBean
      * @return
      */
-    private String generateSignForApp(final String timeStamp, final WxPayPrePayBean resultBean, final String secret) {
+    private String generateSignForApp(final String timeStamp, final WxPayPrePayBean resultBean) {
         final StringBuffer signSrc = new StringBuffer();
-        signSrc.append("appid=").append(resultBean.getAppid()).append("&");
-        signSrc.append("noncestr=").append(resultBean.getNonce_str()).append("&");
-        signSrc.append("package=").append("Sign=WXPay").append("&");
-        signSrc.append("partnerid=").append(resultBean.getMch_id()).append("&");
-        signSrc.append("prepayid=").append(resultBean.getPrepay_id()).append("&");
-        signSrc.append("timestamp=").append(timeStamp).append("&");
-        signSrc.append("key=").append(secret);
+        signSrc.append("appId=").append(resultBean.getAppid()).append("&");
+        signSrc.append("nonceStr=").append(resultBean.getNonce_str()).append("&");
+        signSrc.append("package=").append("prepay_id="+resultBean.getPrepay_id()).append("&");
+        signSrc.append("signType=").append("MD5").append("&");
+        signSrc.append("timeStamp=").append(timeStamp).append("&");
+        signSrc.append("key=").append("dVrC7OGC7hKzr1zyIcfWdy0fCKES2eiO");
        
         return  MD5Util.toMD5String(signSrc.toString()).toUpperCase();
     } 
@@ -181,14 +199,15 @@ public class WeixinOrderServiceImpl implements WeixinOrderService {
         unifiedOrderBean.setAppid(wxPayConfig.getAppId());
         unifiedOrderBean.setMch_id(wxPayConfig.getMchId());
         unifiedOrderBean.setNonce_str(this.getNonceStr(16));
-        unifiedOrderBean.setBody("约健范-购买课程");
+        unifiedOrderBean.setBody(order.getSubject());
         unifiedOrderBean.setOut_trade_no(order.getOrderNo());
         // TODO: 设置真实价格
-        unifiedOrderBean.setTotal_fee(1);   //真实价格:alipay.getTotalFee()
+        unifiedOrderBean.setTotal_fee(order.getTotalFee().intValue());   //真实价格:alipay.getTotalFee()
         unifiedOrderBean.setSpbill_create_ip(order.getSpbill_create_ip());
         unifiedOrderBean.setNotify_url(notifyurl);//回调地址
+        unifiedOrderBean.setOpenid(order.getOpenId());
         unifiedOrderBean.setSign(this.generateSignForPrePayId(unifiedOrderBean, wxPayConfig.getSecret()));
-
+        unifiedOrderBean.setTrade_type(tradeType);
         // 请求统一下单接口
         final WxPayPrePayBean bean = this.requestWx(unifiedOrderBean);
 
@@ -260,30 +279,17 @@ public class WeixinOrderServiceImpl implements WeixinOrderService {
         final StringBuffer signSrc = new StringBuffer();
         signSrc.append("appid=").append(unifiedOrderBean.getAppid()).append("&");
         signSrc.append("body=").append(unifiedOrderBean.getBody()).append("&");
-        if (unifiedOrderBean.getDetail() != null) {
-            signSrc.append("detail=").append(unifiedOrderBean.getDetail()).append("&");
-        }
-        if (unifiedOrderBean.getDevice_info() != null) {
-            signSrc.append("device_info=").append(unifiedOrderBean.getDevice_info()).append("&");
-        }
-        if (unifiedOrderBean.getFee_type() != null) {
-            signSrc.append("fee_type=").append(unifiedOrderBean.getFee_type()).append("&");
-        }
         signSrc.append("mch_id=").append(unifiedOrderBean.getMch_id()).append("&");
         signSrc.append("nonce_str=").append(unifiedOrderBean.getNonce_str()).append("&");
         signSrc.append("notify_url=").append(unifiedOrderBean.getNotify_url()).append("&");
+        signSrc.append("openid=").append(unifiedOrderBean.getOpenid()).append("&");
         signSrc.append("out_trade_no=").append(unifiedOrderBean.getOut_trade_no()).append("&");
         signSrc.append("spbill_create_ip=").append(unifiedOrderBean.getSpbill_create_ip()).append("&");
-        if (unifiedOrderBean.getTime_expire() != null) {
-            signSrc.append("time_expire=").append(unifiedOrderBean.getTime_expire()).append("&");
-        }
-        if (unifiedOrderBean.getTime_start() != null) {
-            signSrc.append("time_start=").append(unifiedOrderBean.getTime_start()).append("&");
-        }
         signSrc.append("total_fee=").append(unifiedOrderBean.getTotal_fee()).append("&");
         signSrc.append("trade_type=").append(unifiedOrderBean.getTrade_type()).append("&");
         //设置密钥
-        signSrc.append("key=").append(secret);
+//        signSrc.append("key=").append(secret);
+        signSrc.append("key=").append("dVrC7OGC7hKzr1zyIcfWdy0fCKES2eiO");
         final String signInfo = signSrc.toString();
 
         return MD5Util.toMD5String(signInfo).toUpperCase();

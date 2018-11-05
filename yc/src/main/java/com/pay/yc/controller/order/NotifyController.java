@@ -1,8 +1,10 @@
 package com.pay.yc.controller.order;
 
+import com.alibaba.fastjson.JSONObject;
 import com.pay.yc.bean.WeixinNotifyBean;
 import com.pay.yc.bean.WeixinNotifyResponse;
 import com.pay.yc.common.enumpub.PaymentTradeStatus;
+import com.pay.yc.common.util.JsonUtils;
 import com.pay.yc.config.WxPayConfig;
 import com.pay.yc.constants.PaymentConstant;
 import com.pay.yc.model.order.WeixinUnifiedOrder;
@@ -13,6 +15,7 @@ import com.thoughtworks.xstream.io.naming.NoNameCoder;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import jdk.nashorn.internal.parser.JSONParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,6 +50,7 @@ public class NotifyController {
     @RequestMapping(value = "/weixin", produces = "application/xml")
     @ResponseBody
     public String weixinNodify(@RequestBody final WeixinNotifyBean weixinNotifyBean) {
+        log.info("收到微信支付回调========================================"+weixinNotifyBean.getResultCode());
         if (NotifyController.log.isInfoEnabled()) {
             NotifyController.log.info("weixin nodify is arrival. out_trade_no is {} ", weixinNotifyBean.getOutTradeNo());
         }
@@ -79,9 +83,13 @@ public class NotifyController {
             returnBean.setReturn_msg("支付失败");
             return xStreamResult.toXML(returnBean);
         }
+        log.info("微信回调参数:----------------------------"+weixinNotifyBean.toString());
+        log.info("微信回调参数:----------------------------"+ JsonUtils.toJson(weixinNotifyBean));
         //验证签名
         final String returnSign = this.weixinNotifyService.generateReturnSign(weixinNotifyBean, wxPayConfig);
         if (!returnSign.equals(weixinNotifyBean.getSign())) {
+            log.info("微信返回的签名----------------------:"+weixinNotifyBean.getSign());
+            log.info("系统根据支付成功返回信息生成的签名----------------------:"+ returnSign);
             NotifyController.log.info("支付返回信息生成的签名与微信返回签名不符.", NotifyController.class.getSimpleName(),
                     "支付返回信息生成的签名与微信返回签名不符");
             returnBean.setReturn_code("FAIL");

@@ -1,9 +1,11 @@
 package com.pay.yc.controller.order;
 
 import com.pay.yc.bean.WeixinParamBean;
+import com.pay.yc.common.enumpub.PaymentOrderType;
 import com.pay.yc.common.enumpub.PaymentTradeStatus;
 import com.pay.yc.common.result.dto.PageResultDTO;
 import com.pay.yc.common.result.dto.ResultDTO;
+import com.pay.yc.common.util.order.UniformOrderGeneratorUtil;
 import com.pay.yc.config.WxPayConfig;
 import com.pay.yc.convertor.order.UnifiedOrderConvertor;
 import com.pay.yc.dto.order.UnifiedOrderDTO;
@@ -75,16 +77,33 @@ public class UnifiedOrderController {
         wxPayConfig.setMchId(mchid);
         wxPayConfig.setSecret(secret);
 
-        // 创建订单
-        final WeixinUnifiedOrder model = this.weixinOrderService.create(wxParamBean, wxPayConfig);
+        // 创建业务订单
+        UnifiedOrder unifiedOrder=new UnifiedOrder();
+        String orderNo=UniformOrderGeneratorUtil.getOrderNum()+UniformOrderGeneratorUtil.getRandomNumStringByLength(5);
+        //需要使用统一订单生成器
+        unifiedOrder.setOrderNo(orderNo);
+        //金额
+        unifiedOrder.setTotalFee(wxParamBean.getTotalFee());
+        //标题
+        unifiedOrder.setSubject(wxParamBean.getSubject());
+        //微信公众号内支付需传openId
+        unifiedOrder.setOpenId(wxParamBean.getOpenId());
 
+        //签名信息在Service中添加。
+        unifiedOrder.setType(PaymentOrderType.WEIXIN);
+        unifiedOrder.setStatus(PaymentTradeStatus.WATING);//创建订单默认状态为waiting
+        this.unifiedOrderRepository.save(unifiedOrder);
+
+        wxParamBean.setOrderNo(orderNo);
+        final WeixinUnifiedOrder model = this.weixinOrderService.create(wxParamBean, wxPayConfig);
         // 生成返回结果
         final WeixinUnifiedOrderDTO dto = new WeixinUnifiedOrderDTO();
+        dto.setId(model.getId());
         dto.setAppid(model.getAppId());
         dto.setPartnerid(wxPayConfig.getMchId());
         dto.setPrepayid(model.getPrepayId());
-//        dto.setOrderNo(model.getOrderNo());
-        dto.setWxPackage("Sign=WXPay");
+        dto.setOrderNo(model.getOrderNo());
+//        dto.setWxPackage("Sign=WXPay");
         dto.setNonceStr(model.getNonceStr());
         dto.setTimestamp(model.getTimestamp());
         dto.setSign(model.getSign());

@@ -40,6 +40,11 @@ public class WeixinUnifiedOrder extends AbstractModel {
     @Column(length = 32)
     private String appId;
 
+    @NotNull
+    @Length(max = 32)
+    @Column(length = 32)
+    private String openId;
+
     /**
      * 支付平台订单交易号。 微信(transaction_id)最大长度为32；支付宝(trade_no)最大程度为64
      */

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 public class WeixinUnifiedOrderDTO extends AbstractDTO {
@@ -34,10 +36,10 @@ public class WeixinUnifiedOrderDTO extends AbstractDTO {
     private String timestamp;
 
 //
-//    @ApiModelProperty(value=" 商户订单号。 微信(out_trade_no)最大长度为32；支付宝(out_trade_no)最大程度为64",position = 2)
-//    @NotNull
-//    @Length(max = 32)
-//    private String orderNo;
+    @ApiModelProperty(value=" 商户订单号。 微信(out_trade_no)最大长度为32；支付宝(out_trade_no)最大程度为64",position = 2)
+    @NotNull
+    @Length(max = 32)
+    private String orderNo;
     @ApiModelProperty(value="sign",position = 3)
     private String sign;
 

@@ -12,6 +12,8 @@ public class WeixinParamBean {
      */
     private String orderNo;
 
+    private String openId;
+
     /**
      *商品标题
      */

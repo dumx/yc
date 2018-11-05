@@ -33,6 +33,9 @@ public class  UnifiedOrder extends AbstractPersistable<Long> {
      */
     private Date createTime;
 
+    //用户唯一标识
+    private String openId;
+
     /**
      * 订单号
      */
@@ -41,11 +44,8 @@ public class  UnifiedOrder extends AbstractPersistable<Long> {
     @Column(length = 32)
     private String orderNo;
 
-    /**
-     * 商户id
-     */
-    @Column
-    private Long UserId;
+
+    private Long userId;
 
     /**
      * 支付金额(单位分)
@@ -93,14 +93,7 @@ public class  UnifiedOrder extends AbstractPersistable<Long> {
     @Column
     private Date finishTime;
 
-    /**
-     * 用户付款中途退出返回商户网站的地址
-     */
-    private String quitUrl;
 
-    /**
-     * 回调Url.
-     */
-    private String notifyUrl;
+
 
 }

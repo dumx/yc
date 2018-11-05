@@ -23,7 +23,7 @@ public class AdminDataInit implements CommandLineRunner {
 
     @Override
     public void run(String... arg0) throws Exception {
-		initUser();
+//		initUser();
 
     }
 
@@ -32,7 +32,7 @@ public class AdminDataInit implements CommandLineRunner {
         User User = new User();
         User.setCreatedDate(new Date());
         User.setUsername("admin");
-        User.setMobile("18500239594");
+        User.setMobile("18500239596");
         User.setUserType(0);
         User.setPassword(encoder.encode("111111"));//短信验证码代替
         UserRepository.save(User);
