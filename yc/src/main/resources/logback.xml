@@ -57,7 +57,7 @@
 
 
 	<!-- 自定义日志 -->
-    <logger name="com.zzhsoft.zzhbody" level="INFO" />
+    <logger name="com.pay.yc" level="INFO" />
     <logger name="org.springframework" level="WARN" />
     
 	<root level="INFO">
