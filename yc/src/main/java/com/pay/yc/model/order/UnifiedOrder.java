@@ -1,6 +1,13 @@
 package com.pay.yc.model.order;
 
-import java.util.Date;
+import com.google.common.primitives.Longs;
+import com.pay.yc.common.enumpub.PaymentOrderType;
+import com.pay.yc.common.enumpub.PaymentTradeStatus;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,16 +16,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
-
-import com.pay.yc.common.enumpub.PaymentOrderType;
-import com.pay.yc.common.enumpub.PaymentTradeStatus;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.data.jpa.domain.AbstractPersistable;
-
-
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -46,6 +44,11 @@ public class  UnifiedOrder extends AbstractPersistable<Long> {
 
 
     private Long userId;
+
+
+
+    @Column(length = 32)
+    private Integer seatNo;
 
     /**
      * 支付金额(单位分)
@@ -92,6 +95,12 @@ public class  UnifiedOrder extends AbstractPersistable<Long> {
      */
     @Column
     private Date finishTime;
+
+    /**
+     *订单类型
+     */
+    @Column
+    private String orderType;
 
 
 

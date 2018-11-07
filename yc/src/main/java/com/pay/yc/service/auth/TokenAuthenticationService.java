@@ -37,7 +37,7 @@ public class TokenAuthenticationService {
                 // 保存权限（角色）
                 .claim("authorities",getRoleList(model))
                 // 用户名写入标题
-                .setSubject(model.getOpenId().toString())
+                .setSubject(model.getId().toString())
                 // 有效期设置
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
                 // 签名设置

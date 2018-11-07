@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;
 
+import java.util.List;
+
 public interface UnifiedOrderRepository extends Repository<UnifiedOrder, Long>{
    UnifiedOrder save(final UnifiedOrder model);
 
@@ -38,5 +40,7 @@ public interface UnifiedOrderRepository extends Repository<UnifiedOrder, Long>{
 
    //查看订单详情
    UnifiedOrder findOneById(Long id);
+
+   List<UnifiedOrder> findAll();
 
 }

@@ -34,4 +34,14 @@ public class WeixinParamBean {
      */
     private String notifyUrl;
 
+    /**
+     *座位号
+     */
+    private Integer seatNo;
+
+    /**
+     *订单类型
+     */
+    private String type;
+
 }

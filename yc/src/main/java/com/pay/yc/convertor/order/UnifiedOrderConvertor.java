@@ -35,10 +35,8 @@ public class UnifiedOrderConvertor extends AbstractConvertor<UnifiedOrder, Unifi
         model.setOrderNo(dto.getOrderNo());
         //支付平台
         model.setPlatform(dto.getPlatform());
-//        model.setUserId(dto.getUserId());
         //订单创建时间
         model.setCreateTime(new Date());
-//        model.setNotifyUrl(dto.getNotifyUrl());
         return model;
     }
     public UnifiedOrderDTO toDTO(UnifiedOrder model, boolean arg1) {
@@ -56,7 +54,6 @@ public class UnifiedOrderConvertor extends AbstractConvertor<UnifiedOrder, Unifi
         dto.setUserId(model.getUserId());
         dto.setState(model.getState());
         dto.setStatus(model.getStatus());
-//        dto.setNotifyUrl(model.getNotifyUrl());
         return dto;
     }
 

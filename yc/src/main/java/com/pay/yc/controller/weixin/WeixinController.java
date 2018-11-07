@@ -2,6 +2,7 @@ package com.pay.yc.controller.weixin;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
+import com.pay.yc.common.result.dto.ResultDTO;
 import com.pay.yc.model.admin.User;
 import com.pay.yc.repository.admin.UserRepository;
 import io.jsonwebtoken.Jwts;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -92,6 +95,30 @@ public class WeixinController {
         return null;
     }
 
+    @PostMapping(value = "/saveMobile")
+    public ResultDTO<?> saveMobile(@RequestBody Map map) {
+        String mobile=map.get("mobile").toString();
+        String openId=map.get("openId").toString();
+        User user=this.userRepository.findByOpenId(openId);
+        if(user!=null){
+            user.setMobile(mobile);
+            User u=this.userRepository.save(user);
+            return ResultDTO.success(u);
+        }else{
+            return ResultDTO.failure();
+        }
+    }
+
+    @GetMapping(value = "/checkMobile")
+    public Boolean checkMobile(@RequestParam String openId) {
+        User user=this.userRepository.findByOpenId(openId);
+        if(user.getMobile() !=null && !user.getMobile().equals("")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 
     /**
      * 从微信拉取用户信息
@@ -166,8 +193,9 @@ public class WeixinController {
                     map.put("openId", openId);
                     map.put("id", u.getId());
                     //获取系统 token
-                    String ycToken=this.getToken(openId);
+                    String ycToken=this.getToken(u.getId());
                     map.put("token", ycToken);
+                    map.put("mobile",u.getMobile());
                     log.info("生成本系统新 token====================================:"+ycToken);
                 } else {
                     log.info("该用户已授权直接返回====================================");
@@ -176,8 +204,9 @@ public class WeixinController {
                     map.put("refreshToken", refreshToken);
                     map.put("id",user.getId());
                     //获取系统 token
-                    String ycToken=this.getToken(openId);
+                    String ycToken=this.getToken(user.getId());
                     map.put("token", ycToken);
+                    map.put("mobile",user.getMobile());
                     log.info("生成本系统新 token====================================:"+ycToken);
                 }
                 return map;
@@ -192,13 +221,13 @@ public class WeixinController {
      * @param openId
      * @return
      */
-    public String getToken(String openId) {
+    public String getToken(Long userId) {
 //        User model=this.userRepository.findOneById(uid);
         String newToken = Jwts.builder()
                 // 保存权限（角色）
                 .claim("authorities", "")
                 // 用户名写入标题
-                .setSubject(openId.toString())
+                .setSubject(userId.toString())
                 // 有效期设置
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
                 // 签名设置

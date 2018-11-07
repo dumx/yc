@@ -88,7 +88,7 @@ public class WeixinOrderServiceImpl implements WeixinOrderService {
         //需要使用统一订单生成器
         order.setOrderNo(wxParamBean.getOrderNo());
         //金额
-        order.setTotalFee(wxParamBean.getTotalFee());
+        order.setTotalFee(wxParamBean.getTotalFee() *100);
         //标题
         order.setSubject(wxParamBean.getSubject());
         //微信公众号内支付需传openId
