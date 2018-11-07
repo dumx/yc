@@ -33,29 +33,28 @@
 			<img src="public/images/list/zheng.png" />
 			<div class="tag">
 				<div class="title">
-					<p>正钓门票<p style="font-size: 0.3rem">(</p><p style="font-size: 0.3rem">2018-10-25 7:00-12:00</p><p style="font-size: 0.3rem">)</p></p></p>
-					<!--<p style="font-size: 0.3rem;float: right">正钓时间：25日7:00-12:00</p>-->
-					<i style="color: red;float: right">¥800</i>
+					<p id="zhengName">正钓<p style="font-size: 0.3rem">(</p><p style="font-size: 0.3rem" id="zhengTime">2018-10-25 7:00-12:00</p><p style="font-size: 0.3rem">)</p></p></p>
+					<i style="color: red;float: right" id="zhengMoney">¥0</i>
 				</div>
-				<div class="tips">正钓门票提前购买，售空为止!</div>
+				<div class="tips" id="zhengRemarke">正钓门票提前购买，售空为止!</div>
 			</div>
 		</a>
-		<a href="detail/index.html" class="img">
+		<a href="javascript:void(0);" class="img" onclick="onIndexUnifiedOrder();">
 			<img src="public/images/list/fan.png" />
 			<div class="tag">
 				<div class="title">
-					<p>溜鱼时间<p style="font-size: 0.3rem">(</p><p style="font-size: 0.3rem">2018-10-25 7:00-12:00</p><p style="font-size: 0.3rem">)</p></p></p>
-					<i style="color: red;float: right">¥800</i>
+					<p id="liuName">溜鱼<p style="font-size: 0.3rem">(</p><p style="font-size: 0.3rem" id="liuTime">2018-10-25 7:00-12:00</p><p style="font-size: 0.3rem">)</p></p></p>
+					<i style="color: red;float: right" id="liuMoney">0</i>
 				</div>
-				<div class="tips">溜鱼门票购买后开始计时，请合理安排购票时间</div>
+				<div class="tips" id="liuRemarke">溜鱼门票购买后开始计时，请合理安排购票时间</div>
 			</div>
 		</a>
-		<input type="text"  hidden id="appId" value="">
-		<input type="text"  hidden id="timeStamp" value="">
-		<input type="text"  hidden id="nonceStr" value="">
-		<input type="text"  hidden id="package" value="">
-		<input type="text"  hidden id="paySign" value="">
-		<div class="pay_but"><a href="javascript:void(0);" onclick="onUnifiedOrder();">确认支付</a></div>
+        <input type="text"  hidden id="appId" value="">
+        <input type="text"  hidden id="timeStamp" value="">
+        <input type="text"  hidden id="nonceStr" value="">
+        <input type="text"  hidden id="package" value="">
+        <input type="text"  hidden id="paySign" value="">
+
 		<!--<a href="detail/index.html"  class="img">-->
 			<!--<img src="public/images/list/c-1.jpg" />-->
 			<!--<div class="tag">-->

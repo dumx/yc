@@ -9,6 +9,8 @@ $(function () {
     var  process={
         init:function(){
             this.public();
+            this.getOrderList();
+
         },
         public:function () {
 			/**  查看物流 **/
@@ -122,7 +124,31 @@ $(function () {
 				 }
                
             });
+        },
+        //获取订单信息
+        getOrderList:function () {
+            $.ajax({
+                type: "GET",
+                url: "/apis/wx/oauth?code="+$.cookie("code"),
+                dataType: "json",
+                success: function(data){
+                    var date = new Date();
+                    date.setTime(date.getTime() + 120 * 60 * 1000);//token过期时间,第一个60分钟
+                    // if($.cookie("accessToken")!=null){
+                    var openId = data.openId;
+                    var accessToken=data.accessToken;
+                    var refreshToken=data.refreshToken;
+                    var yctoken=data.token;
+                    $.cookie("wxopenId",openId,date);
+                    $.cookie("accessToken",accessToken,date);
+                    $.cookie("refreshToken",refreshToken,date);
+                    //将本系统生成的 token 放入 cookie 进行后续的接口验证
+                    $.cookie("token",yctoken);
+                    // }
+                }
+            });
         }
+
     };
 
     window.onload = function(){
