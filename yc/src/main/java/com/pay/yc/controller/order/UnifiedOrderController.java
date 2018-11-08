@@ -10,9 +10,11 @@ import com.pay.yc.config.WxPayConfig;
 import com.pay.yc.convertor.order.UnifiedOrderConvertor;
 import com.pay.yc.dto.order.UnifiedOrderDTO;
 import com.pay.yc.dto.order.WeixinUnifiedOrderDTO;
+import com.pay.yc.model.admin.Config;
 import com.pay.yc.model.admin.User;
 import com.pay.yc.model.order.UnifiedOrder;
 import com.pay.yc.model.order.WeixinUnifiedOrder;
+import com.pay.yc.repository.admin.ConfigRepository;
 import com.pay.yc.repository.admin.UserRepository;
 import com.pay.yc.repository.order.UnifiedOrderRepository;
 import com.pay.yc.service.order.UnifiedOrderService;
@@ -62,6 +64,9 @@ public class UnifiedOrderController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ConfigRepository configRepository;
+
 
 
 
@@ -105,6 +110,15 @@ public class UnifiedOrderController {
         unifiedOrder.setStatus(PaymentTradeStatus.WATING);//创建订单默认状态为waiting
         unifiedOrder.setCreateTime(new Date());
         unifiedOrder.setOrderType(wxParamBean.getType());
+
+        //保存时间
+        Config config=this.configRepository.findByType(wxParamBean.getType());
+//        unifiedOrder.setDayTime(config.getDayTime());
+//        unifiedOrder.setBeginHour(config.getBeginHour());
+//        unifiedOrder.setEndHour(config.getEndHour());
+        unifiedOrder.setBeginTime(config.getBeginTime());
+        unifiedOrder.setEndTime(config.getEndTime());
+
         if(wxParamBean.getSeatNo()!=null){
             unifiedOrder.setSeatNo(wxParamBean.getSeatNo());
         }

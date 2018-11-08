@@ -103,6 +103,30 @@ public class  UnifiedOrder extends AbstractPersistable<Long> {
     private String orderType;
 
 
+    /**
+     * 开始日期(取年月日)
+     */
+    @Column
+    private Date beginTime;
+
+    /**
+     * 结束日期(取年月日)
+     */
+    @Column
+    private Date endTime;
+
+//    /**
+//     * 开始小时
+//     */
+//    @Column
+//    private Integer beginHour;
+//
+//    /**
+//     * 结束小时
+//     */
+//    @Column
+//    private Integer endHour;
+
 
 
 }

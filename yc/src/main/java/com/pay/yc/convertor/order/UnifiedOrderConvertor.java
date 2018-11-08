@@ -3,7 +3,10 @@ package com.pay.yc.convertor.order;
 import com.pay.yc.common.result.AbstractConvertor;
 import com.pay.yc.constants.Constants;
 import com.pay.yc.dto.order.UnifiedOrderDTO;
+import com.pay.yc.model.admin.Config;
 import com.pay.yc.model.order.UnifiedOrder;
+import com.pay.yc.repository.admin.ConfigRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.DecimalFormat;
@@ -17,6 +20,10 @@ import java.util.Date;
 @Component
 public class UnifiedOrderConvertor extends AbstractConvertor<UnifiedOrder, UnifiedOrderDTO> {
 
+
+
+    @Autowired
+    private ConfigRepository configRepository;
 
     public UnifiedOrder toModel(UnifiedOrderDTO dto, UnifiedOrder model) {
         if(model == null) {
@@ -54,6 +61,15 @@ public class UnifiedOrderConvertor extends AbstractConvertor<UnifiedOrder, Unifi
         dto.setUserId(model.getUserId());
         dto.setState(model.getState());
         dto.setStatus(model.getStatus());
+        //开始结束时间
+        dto.setBeginTime(model.getBeginTime());
+        dto.setEndTime(model.getEndTime());
+        dto.setSeatNo(model.getSeatNo());
+
+        dto.setOrderType(model.getOrderType());
+
+        Config config=this.configRepository.findByType(model.getOrderType());
+        dto.setConfigRemark(config.getRemark());
         return dto;
     }
 

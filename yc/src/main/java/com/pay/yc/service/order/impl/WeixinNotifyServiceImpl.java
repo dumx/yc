@@ -1,5 +1,7 @@
 package com.pay.yc.service.order.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
 import com.hazelcast.util.MD5Util;
 import com.pay.yc.bean.WeixinNotifyBean;
 import com.pay.yc.common.enumpub.PaymentOrderType;
@@ -9,11 +11,14 @@ import com.pay.yc.common.util.JsonUtils;
 import com.pay.yc.common.util.order.RestHelper;
 import com.pay.yc.config.WxPayConfig;
 import com.pay.yc.constants.Constants;
+import com.pay.yc.model.admin.User;
 import com.pay.yc.model.order.UnifiedOrder;
 import com.pay.yc.model.order.WeixinUnifiedOrder;
+import com.pay.yc.repository.admin.UserRepository;
 import com.pay.yc.repository.order.UnifiedOrderRepository;
 import com.pay.yc.repository.order.WeixinUnifiedOrderRepository;
 import com.pay.yc.service.order.WeixinNotifyService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -25,7 +30,18 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 微信支付回调
@@ -34,6 +50,7 @@ import java.util.Date;
  * @version V1.0 
  * 注意：禁止外泄以及用于其他的商业目的
  */
+@Slf4j
 @Service
 @Transactional
 public class WeixinNotifyServiceImpl implements WeixinNotifyService {
@@ -49,6 +66,9 @@ public class WeixinNotifyServiceImpl implements WeixinNotifyService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Value(value = "${pay.weixin.key}")
     private String key;
@@ -80,9 +100,13 @@ public class WeixinNotifyServiceImpl implements WeixinNotifyService {
 
         final String retMessage = this.setPayStatusToStack(model);
         //更新业务订单表支付信息
-        this.unifiedOrderRepository.save(uifiedOrder);
+        UnifiedOrder u=this.unifiedOrderRepository.save(uifiedOrder);
         //更新微信预下单支付信息
         weixinUnifiedOrderRepository.save(model);
+
+
+        //更新门禁系统时间
+        this.updateDoorInfo(u);
 
         if ("success".equals(retMessage)) {
             model.setTimeEnd(new Date());
@@ -90,6 +114,100 @@ public class WeixinNotifyServiceImpl implements WeixinNotifyService {
             //TODO 循环调用通知方法。
         }
         return model;
+    }
+
+    /**
+     * 更新门禁时间
+     * @returnu
+     */
+    public String updateDoorInfo(UnifiedOrder u){
+        SimpleDateFormat formatDay = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatHour = new SimpleDateFormat("HH:mm");
+        HashMap map = new HashMap();
+        map.put("apiid", "bl14fd434cbe055eac");
+        map.put("apikey", "e44ee2af7f9aaa857aaa501e65e9dcb6");
+        String tokenStr = httpUrlConnection("https://api.parkline.cc/api/token", map);
+        JSONObject tokenMap = new Gson().fromJson(tokenStr, JSONObject.class);
+        String token = tokenMap.getString("access_token");
+        log.info("更新门禁系统信息获取token:-----------------"+token);
+        HashMap<String, String> bind = new HashMap<>();
+        bind.put("token", token);
+        bind.put("typeid", "203");
+        User user=this.userRepository.findByOpenId(u.getOpenId());
+        bind.put("tel", user.getMobile());
+        bind.put("devid", "215093");
+        bind.put("lockid", "01");
+        bind.put("startdate", formatDay.format(u.getBeginTime()));
+        log.info("更新门禁系统信息开始时间:-----------------"+formatDay.format(u.getBeginTime()));
+        bind.put("enddate", formatDay.format(u.getEndTime()));
+        log.info("更新门禁系统信息结束时间:-----------------"+formatDay.format(u.getEndTime()));
+        bind.put("starttime", formatHour.format(u.getBeginTime()));
+        log.info("更新门禁系统信息开始小时:-----------------"+formatHour.format(u.getBeginTime()));
+        bind.put("endtime", formatHour.format(u.getEndTime()));
+
+        log.info("更新门禁系统信息结束小时:-----------------"+formatHour.format(u.getEndTime()));
+        String bindResult = httpUrlConnection("https://api.parkline.cc/api/facecgi", bind);
+        log.info("更新门禁系统信息:-----------------"+bindResult);
+        Map m=new HashMap();
+        m.put("bindResult",bindResult);
+        m.put("mobile",user.getMobile());
+        m.put("binded",user.getBinded());
+        m.put("bindToken",token);
+        return bindResult;
+    }
+
+    private static String httpUrlConnection(String pathurl, HashMap<String, String> hm) {
+
+        String result = null;
+        try {
+            URL url = new URL(pathurl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestProperty("referer", "http://u66whn.natappfree.cc");//后台填写的授权接入地址，必须包含http或https协议
+            conn.setRequestMethod("POST");
+            PrintWriter pw = new PrintWriter(conn.getOutputStream());
+            pw.print(getParams(hm));
+            pw.flush();
+            pw.close();
+            if (conn.getResponseCode() == 200) {
+                StringBuffer sb = new StringBuffer();
+                String readLine;
+                BufferedReader responseReader;
+                responseReader = new BufferedReader(new InputStreamReader(conn
+                        .getInputStream(), "utf-8"));
+                while ((readLine = responseReader.readLine()) != null) {
+                    sb.append(readLine);
+                }
+                responseReader.close();
+                result = sb.toString();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String getParams(Map<String, String> paramValues) {
+        String params = "";
+        String beginLetter = "";
+        Set<String> key = paramValues.keySet();
+        try {
+            for (Iterator<String> it = key.iterator(); it.hasNext(); ) {
+                String s = (String) it.next();
+                if (params.equals("")) {
+                    params += beginLetter + s + "="
+                            + URLEncoder.encode(paramValues.get(s), "UTF-8");
+                } else {
+                    params += "&" + s + "="
+                            + URLEncoder.encode(paramValues.get(s), "UTF-8");
+                }
+            }
+        } catch (Exception e) {
+
+        }
+
+
+        return params;
     }
 
     public String setPayStatusToStack(final WeixinUnifiedOrder model) {

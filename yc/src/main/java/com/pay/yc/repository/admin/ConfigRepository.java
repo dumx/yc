@@ -24,5 +24,7 @@ public interface ConfigRepository extends CrudRepository<Config, Long> {
 	//配置列表
 	Page<Config> findAll(Pageable pageable);
 
+	Config findByType(String type);
+
 }
 	

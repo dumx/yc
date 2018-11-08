@@ -7,6 +7,7 @@ import com.pay.yc.model.admin.User;
 import com.pay.yc.repository.admin.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jdk.nashorn.internal.scripts.JS;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,12 +21,20 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 /**
 * @TODO 微信授权
@@ -103,10 +112,143 @@ public class WeixinController {
         if(user!=null){
             user.setMobile(mobile);
             User u=this.userRepository.save(user);
-            return ResultDTO.success(u);
+            //保存手机号的同时注册门禁系统
+            Map m=registerDoorSystem(u);
+            return ResultDTO.success(m);
         }else{
             return ResultDTO.failure();
         }
+    }
+
+
+
+    //微信绑定门禁系统
+    @GetMapping(value = "/weixinbindrDoorSystem")
+    public Map weixinbindrDoorSystem(@RequestParam String mobile){
+        HashMap map = new HashMap();
+        map.put("apiid", "bl14fd434cbe055eac");
+        map.put("apikey", "e44ee2af7f9aaa857aaa501e65e9dcb6");
+        String tokenStr = httpUrlConnection("https://api.parkline.cc/api/token", map);
+        JSONObject tokenMap = new Gson().fromJson(tokenStr, JSONObject.class);
+        String token = tokenMap.getString("access_token");
+
+        log.info("获取二维码111111111token==============================:"+tokenStr);
+        log.info("获取二维码222222222token==============================:"+ tokenMap.getString("access_token"));
+        log.info("获取二维码token==============================:"+token);
+
+        //获取二维码
+        HashMap<String, String> bind = new HashMap<>();
+        bind.put("token",token);
+        bind.put("tel",mobile);
+        bind.put("devid","215093");
+        String bindResult = httpUrlConnection("https://api.parkline.cc/api/wxbind", bind);
+        log.info("获取二维码==============================:"+bindResult);
+        JSONObject jsonObject=JSONObject.parseObject(bindResult);
+        String code=jsonObject.getString("code");
+        String url=jsonObject.getString("url");
+        //获取成功,直接绑定
+//        if("0".equals(code)){
+//
+//            ResponseEntity<String> openResponse = restTemplate.getForEntity(String.format(url), String.class);
+//            openResponse.getStatusCode();
+//            openResponse.getBody();
+//        }
+        Map m=new HashMap();
+        m.put("code",code);
+        m.put("url",url);
+        return m;
+    }
+
+
+    //注册门禁系统
+    public Map registerDoorSystem(User user){
+        HashMap map = new HashMap();
+        map.put("apiid", "bl14fd434cbe055eac");
+        map.put("apikey", "e44ee2af7f9aaa857aaa501e65e9dcb6");
+        String tokenStr = httpUrlConnection("https://api.parkline.cc/api/token", map);
+        JSONObject tokenMap = new Gson().fromJson(tokenStr, JSONObject.class);
+        String token = tokenMap.getString("access_token");
+        User userModel = new User();
+        userModel.setMobile(user.getMobile());
+        HashMap<String, String> add = new HashMap<>();
+        add.put("token", token);
+        add.put("typeid", "100");
+        add.put("nickname", "测试");
+        add.put("tel", user.getMobile());
+        String addResult = httpUrlConnection("https://api.parkline.cc/api/facecgi", add);
+        log.info(addResult);
+        HashMap<String, String> bind = new HashMap<>();
+        bind.put("token", token);
+        bind.put("typeid", "200");
+        bind.put("tel", user.getMobile());
+        bind.put("devid", "215093");
+        bind.put("lockid", "01");
+        bind.put("startdate", "1970-10-01");
+        bind.put("enddate", "1970-10-01");
+        bind.put("starttime", "00:01");
+        bind.put("endtime", "23:59");
+        String bindResult = httpUrlConnection("https://api.parkline.cc/api/facecgi", bind);
+        log.info(bindResult);
+        Map m=new HashMap();
+        m.put("bindResult",bindResult);
+        m.put("mobile",user.getMobile());
+        m.put("binded",user.getBinded());
+        m.put("bindToken",token);
+        return m;
+    }
+
+    private static String httpUrlConnection(String pathurl, HashMap<String, String> hm) {
+
+        String result = null;
+        try {
+            URL url = new URL(pathurl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestProperty("referer", "http://u66whn.natappfree.cc");//后台填写的授权接入地址，必须包含http或https协议
+            conn.setRequestMethod("POST");
+            PrintWriter pw = new PrintWriter(conn.getOutputStream());
+            pw.print(getParams(hm));
+            pw.flush();
+            pw.close();
+            if (conn.getResponseCode() == 200) {
+                StringBuffer sb = new StringBuffer();
+                String readLine;
+                BufferedReader responseReader;
+                responseReader = new BufferedReader(new InputStreamReader(conn
+                        .getInputStream(), "utf-8"));
+                while ((readLine = responseReader.readLine()) != null) {
+                    sb.append(readLine);
+                }
+                responseReader.close();
+                result = sb.toString();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String getParams(Map<String, String> paramValues) {
+        String params = "";
+        String beginLetter = "";
+        Set<String> key = paramValues.keySet();
+        try {
+            for (Iterator<String> it = key.iterator(); it.hasNext(); ) {
+                String s = (String) it.next();
+                if (params.equals("")) {
+                    params += beginLetter + s + "="
+                            + URLEncoder.encode(paramValues.get(s), "UTF-8");
+                } else {
+                    params += "&" + s + "="
+                            + URLEncoder.encode(paramValues.get(s), "UTF-8");
+                }
+            }
+        } catch (Exception e) {
+
+        }
+
+
+        return params;
     }
 
     @GetMapping(value = "/checkMobile")

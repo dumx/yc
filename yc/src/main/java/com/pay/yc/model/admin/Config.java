@@ -33,19 +33,25 @@ public class Config extends AbstractModel {
      * 开始日期(取年月日)
      */
     @Column
-    private Date dayTime;
+    private Date beginTime;
 
     /**
-     * 开始小时
+     * 开始日期(取年月日)
      */
     @Column
-    private Integer beginHour;
+    private Date endTime;
 
-    /**
-     * 结束小时
-     */
-    @Column
-    private Integer endHour;
+//    /**
+//     * 开始小时
+//     */
+//    @Column
+//    private Integer beginHour;
+//
+//    /**
+//     * 结束小时
+//     */
+//    @Column
+//    private Integer endHour;
 
     /**
      * 排序

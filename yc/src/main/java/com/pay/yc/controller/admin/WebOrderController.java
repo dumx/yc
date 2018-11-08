@@ -65,11 +65,7 @@ public class WebOrderController {
         Specification<UnifiedOrder> specification=this.getWhereClause(UserId,orderNo,state,PaymentTradeStatus.SUCCESS);
         Page<UnifiedOrder> model = this.repositoryExecutor.findAll(specification,pageable);
         PageResultDTO<UnifiedOrderDTO> result = this.unifiedOrderConvertor.toResultDTO(model);
-        if(UserId!=null) {
-            for (UnifiedOrderDTO order : result.getData()) {
-                order.setAlipayName("");
-            }
-        }
+
         log.info("查询全部订单!");
         return result;
     }
@@ -108,11 +104,7 @@ public class WebOrderController {
         Specification<UnifiedOrder> specification=this.getWhereClause(UserId,orderNo,null,PaymentTradeStatus.WATING);
         Page<UnifiedOrder> model = this.repositoryExecutor.findAll(specification,pageable);
         PageResultDTO<UnifiedOrderDTO> result = this.unifiedOrderConvertor.toResultDTO(model);
-        if(UserId!=null) {
-            for (UnifiedOrderDTO order : result.getData()) {
-                order.setAlipayName("");
-            }
-        }
+
         log.info("查询全部订单!");
         return result;
     }
@@ -125,11 +117,6 @@ public class WebOrderController {
         Specification<UnifiedOrder> specification=this.getWhereClause(UserId,orderNo,null,status);
         Page<UnifiedOrder> model = this.repositoryExecutor.findAll(specification,pageable);
         PageResultDTO<UnifiedOrderDTO> result = this.unifiedOrderConvertor.toResultDTO(model);
-        if(UserId!=null) {
-            for (UnifiedOrderDTO order : result.getData()) {
-                order.setAlipayName("");
-            }
-        }
         log.info("查询全部订单!");
         return result;
     }

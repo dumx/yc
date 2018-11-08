@@ -52,6 +52,11 @@ public class User extends AbstractModel implements UserDetails {
     private int userType = 1;
 
 
+    //是否绑定
+    @Column
+    private Integer binded=0;
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

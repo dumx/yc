@@ -75,13 +75,25 @@ public class UnifiedOrderDTO extends AbstractDTO {
      */
     private Integer payType;
 
-    private String notifyUrl;
 
-    private String quitUrl;
+    /**
+     * 开始日期(取年月日)
+     */
+    private Date beginTime;
 
-    private String appId;
+    /**
+     * 开始日期(取年月日)
+     */
+    private Date endTime;
 
-    private String alipayName;
+
+
+    private String orderType;
+
+
+    private String configRemark;
+
+    private Integer seatNo;
 
     public static UnifiedOrderDTO build(){
         return new UnifiedOrderDTO();

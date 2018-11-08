@@ -23,17 +23,22 @@ public class ConfigDTO extends AbstractDTO {
     /**
      * 开始日期(取年月日)
      */
-    private Date dayTime;
+    private Date beginTime;
 
     /**
-     * 开始小时
+     * 开始日期(取年月日)
      */
-    private Integer beginHour;
+    private Date endTime;
 
-    /**
-     * 结束小时
-     */
-    private Integer endHour;
+//    /**
+//     * 开始小时
+//     */
+//    private Integer beginHour;
+//
+//    /**
+//     * 结束小时
+//     */
+//    private Integer endHour;
 
     /**
      * 排序
