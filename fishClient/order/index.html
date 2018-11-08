@@ -19,13 +19,13 @@
 <div class="main bot44">
    <div class="weui-tab">
       <div class="weui-navbar">
-        <a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+        <a class="weui-navbar__item weui-bar__item--on" href="#tab1" onclick="getTab(1)">
           已开始
         </a>
-        <a class="weui-navbar__item" href="#tab2">
+        <a class="weui-navbar__item" href="#tab2" onclick="getTab(2)">
           未开始
         </a>
-        <a class="weui-navbar__item" href="#tab3">
+        <a class="weui-navbar__item" href="#tab3"onclick="getTab(3)" >
           我的鱼获
         </a>
         <!--<a class="weui-navbar__item" href="#tab4">-->
@@ -35,44 +35,6 @@
       <div class="weui-tab__bd">
         <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
            <div class="order-content">
-               <div class="order-con">
-                  <div class="title">
-                     <b class="num">WS19992002300222</b>
-                     <i class="state">已开始</i>
-                  </div>
-                  <div class="list">
-                     <b>
-                       <img src="../public/images/list/zheng.png" />
-                     </b>
-                     <i>
-                       <p>正钓</p>
-                       <p class="num">您的钓位号码：08</p>
-                     </i>
-                  </div>
-                  <div class="bot">
-                    <b class="price">¥1600.00</b>
-                    <i class="data">2018-10-25 07:00-09:00</i>
-                  </div>
-               </div>
-               <div class="order-con">
-                  <div class="title">
-                     <b class="num">WS19992002300222</b>
-                     <i class="state">已开始</i>
-                  </div>
-                  <div class="list">
-                     <b>
-                       <img src="../public/images/list/fan.png" />
-                     </b>
-                     <i>
-                       <p>溜鱼</p>
-                       <p class="num">溜鱼门票购买后开始计时，请合理安排购票时间</p>
-                     </i>
-                  </div>
-                  <div class="bot">
-                    <b class="price">¥1600.00</b>
-                    <i class="data">2018-10-25 07:00-09:00</i>
-                  </div>
-               </div>
                <!--<div class="order-con">-->
                   <!--<div class="title">-->
                      <!--<b class="num">WS19992002300222</b>-->
@@ -80,11 +42,30 @@
                   <!--</div>-->
                   <!--<div class="list">-->
                      <!--<b>-->
-                       <!--<img src="../public/images/icon1.jpg" />-->
+                       <!--<img src="../public/images/list/zheng.png" />-->
                      <!--</b>-->
                      <!--<i>-->
-                       <!--<p>产品名称</p>-->
-                       <!--<p class="num">订购数量b2套件</p>-->
+                       <!--<p>正钓</p>-->
+                       <!--<p class="num">您的钓位号码：08</p>-->
+                     <!--</i>-->
+                  <!--</div>-->
+                  <!--<div class="bot">-->
+                    <!--<b class="price">¥1600.00</b>-->
+                    <!--<i class="data">2018-10-25 07:00-09:00</i>-->
+                  <!--</div>-->
+               <!--</div>-->
+               <!--<div class="order-con">-->
+                  <!--<div class="title">-->
+                     <!--<b class="num">WS19992002300222</b>-->
+                     <!--<i class="state">已开始</i>-->
+                  <!--</div>-->
+                  <!--<div class="list">-->
+                     <!--<b>-->
+                       <!--<img src="../public/images/list/fan.png" />-->
+                     <!--</b>-->
+                     <!--<i>-->
+                       <!--<p>溜鱼</p>-->
+                       <!--<p class="num">溜鱼门票购买后开始计时，请合理安排购票时间</p>-->
                      <!--</i>-->
                   <!--</div>-->
                   <!--<div class="bot">-->
@@ -96,45 +77,45 @@
         </div>
         <div id="tab2" class="weui-tab__bd-item">
           <div class="order-content">
-               <div class="order-con">
-                  <div class="title">
-                     <b class="num">WS19992002300222</b>
-                     <!--<a href="../detail/order-pay.html" class="pay">未开始</a>-->
-                      <i class="state" style="color: red">未开始</i>
-                  </div>
-                  <div class="list">
-                     <b>
-                       <img src="../public/images/list/zheng.png" />
-                     </b>
-                     <i>
-                       <p>正钓</p>
-                       <p class="num">您的钓位号码：08</p>
-                     </i>
-                  </div>
-                  <div class="bot">
-                    <b class="price">¥1600.00</b>
-                    <i class="data">2018-10-25 07:00-09:00</i>
-                  </div>
-               </div>
-               <div class="order-con">
-                  <div class="title">
-                     <b class="num">WS19992002300222</b>
-                      <i class="state" style="color: red">未开始</i>
-                  </div>
-                  <div class="list">
-                     <b>
-                       <img src="../public/images/list/fan.png" />
-                     </b>
-                     <i>
-                       <p>溜鱼</p>
-                       <p class="num">溜鱼门票购买后开始计时，请合理安排购票时间</p>
-                     </i>
-                  </div>
-                  <div class="bot">
-                    <b class="price">¥1600.00</b>
-                    <i class="data">2018-10-25 07:00-09:00</i>
-                  </div>
-               </div>
+               <!--<div class="order-con">-->
+                  <!--<div class="title">-->
+                     <!--<b class="num">WS19992002300222</b>-->
+                     <!--&lt;!&ndash;<a href="../detail/order-pay.html" class="pay">未开始</a>&ndash;&gt;-->
+                      <!--<i class="state" style="color: red">未开始</i>-->
+                  <!--</div>-->
+                  <!--<div class="list">-->
+                     <!--<b>-->
+                       <!--<img src="../public/images/list/zheng.png" />-->
+                     <!--</b>-->
+                     <!--<i>-->
+                       <!--<p>正钓</p>-->
+                       <!--<p class="num">您的钓位号码：08</p>-->
+                     <!--</i>-->
+                  <!--</div>-->
+                  <!--<div class="bot">-->
+                    <!--<b class="price">¥1600.00</b>-->
+                    <!--<i class="data">2018-10-25 07:00-09:00</i>-->
+                  <!--</div>-->
+               <!--</div>-->
+               <!--<div class="order-con">-->
+                  <!--<div class="title">-->
+                     <!--<b class="num">WS19992002300222</b>-->
+                      <!--<i class="state" style="color: red">未开始</i>-->
+                  <!--</div>-->
+                  <!--<div class="list">-->
+                     <!--<b>-->
+                       <!--<img src="../public/images/list/fan.png" />-->
+                     <!--</b>-->
+                     <!--<i>-->
+                       <!--<p>溜鱼</p>-->
+                       <!--<p class="num">溜鱼门票购买后开始计时，请合理安排购票时间</p>-->
+                     <!--</i>-->
+                  <!--</div>-->
+                  <!--<div class="bot">-->
+                    <!--<b class="price">¥1600.00</b>-->
+                    <!--<i class="data">2018-10-25 07:00-09:00</i>-->
+                  <!--</div>-->
+               <!--</div>-->
 
            </div>
         </div>

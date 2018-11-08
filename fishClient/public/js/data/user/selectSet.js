@@ -41,6 +41,7 @@ $(function () {
 
 //预下单接口
 function onUnifiedOrder(){
+    console.info($("#totalMoney").val() / 100);
     var selectSeat=$("#selectSet").val()
     if(selectSeat==null && selectSeat==""){
         return;
@@ -54,7 +55,7 @@ function onUnifiedOrder(){
             // "orderNo": $.cookie("wxopenId"), //后台填充
             // "notifyUrl": $("#notifyUrl").val(),//后台填充
             "subject": $("#name").val(),
-            "totalFee": $("#totalMoney").val(),
+            "totalFee": $("#totalMoney").val() / 100,
             "spbillCreateIp": "123.123.1.123",
             //获取选中的座位号
             "seatNo":selectSeat,

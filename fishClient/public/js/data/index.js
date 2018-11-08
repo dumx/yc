@@ -39,18 +39,21 @@ $(function () {
                 success: function(data){
                     if(data.status=="success"){
                         var result=data.data;
-                        //正钓门票
-                        var beginTime = new Date(result[0].dayTime).format("yyyy-MM-dd");
-                        $("#zhengName").html(result[0].name);
-                        $("#zhengTime").html(beginTime+"   "+result[0].beginHour+":00"+"-"+result[0].endHour+":00");
-                        $("#zhengMoney").html("¥"+result[0].totalFee);
-                        $("#zhengRemarke").html(result[0].remark);
 
+                        var beginTime = new Date(result[0].beginTime).format("yyyy-MM-dd hh");
+                        var endTime = new Date(result[0].endTime).format("hh");
+                        //正钓门票
+                        $("#zhengName").html(result[0].name);
+                        $("#zhengTime").html(beginTime+':00'+'-'+endTime+':00');
+                        $("#zhengMoney").html("¥"+result[0].totalFee /100);
+                        $("#zhengRemarke").html(result[0].remark);
                         //溜鱼时间
-                        var endTime = new Date(result[1].dayTime).format("yyyy-MM-dd");
+                        var beginTime1 = new Date(result[1].beginTime).format("yyyy-MM-dd hh");
+                        var endTime1 = new Date(result[1].endTime).format("hh");
+
                         $("#liuName").html(result[1].name);
-                        $("#liuTime").html(endTime+"   "+result[1].beginHour+":00"+"-"+result[1].endHour+":00");
-                        $("#liuMoney").html(result[1].totalFee);
+                        $("#liuTime").html(beginTime1+':00'+'-'+endTime1+':00');
+                        $("#liuMoney").html(result[1].totalFee /100);
                         $("#liuRemarke").html(result[1].remark);
                     }
 
@@ -62,7 +65,8 @@ $(function () {
          checkMobile:function () {
             $.ajax({
                 type: "GET",
-                url: "/apis/wx/checkMobile?openId="+$.cookie("wxopenId"),
+                // url: "/apis/wx/checkMobile?openId="+$.cookie("wxopenId"),
+                url: "/apis/wx/checkMobile?openId=og9a21KfQaZ_xSA-VtZC1W9MuaK0",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 //设置token
@@ -115,19 +119,19 @@ $(function () {
                     var date = new Date();
                     date.setTime(date.getTime() + 120 * 60 * 1000);//token过期时间,第一个60分钟
                     // if($.cookie("accessToken")!=null){
-                        var openId = data.openId;
-                        var accessToken=data.accessToken;
-                        var refreshToken=data.refreshToken;
-                        var yctoken=data.token;
-                        var mobile=data.mobile;
-                        $.cookie("wxopenId",openId,date);
-                        $.cookie("accessToken",accessToken,date);
-                        $.cookie("refreshToken",refreshToken,date);
-                        //将本系统生成的 token 放入 cookie 进行后续的接口验证
-                        $.cookie("token",yctoken);
-                        if(mobile==null||mobile==""){
-                            alertOneInput('请先绑定手机号','','确定');
-                        }
+                    var openId = data.openId;
+                    var accessToken=data.accessToken;
+                    var refreshToken=data.refreshToken;
+                    var yctoken=data.token;
+                    var mobile=data.mobile;
+                    $.cookie("wxopenId",openId,date);
+                    $.cookie("accessToken",accessToken,date);
+                    $.cookie("refreshToken",refreshToken,date);
+                    //将本系统生成的 token 放入 cookie 进行后续的接口验证
+                    $.cookie("token",yctoken);
+                    if(mobile==null||mobile==""){
+                        alertOneInput('请先绑定手机号','','确定');
+                    }
                     // }
                 }
             });
@@ -281,6 +285,31 @@ function saveMobile() {
                 $.cookie("mobile",data.data.mobile);
                 $.closeModal();
                 $.toptip('手机号保存成功',2000, 'success');
+                if(data.data.binded==0){
+                    $.showLoading("门禁系统绑定中..");
+                    // setTimeout(alertBindDiv(data.data.mobile),3000);
+                    setTimeout(function(){alertBindDiv(data.data.mobile);},3000);//这一行会延迟3秒执行
+
+                }
+            }
+        }
+    });
+}
+
+//弹出二维码绑定公众号
+function alertBindDiv(mobile,bindToken) {
+    //<button onclick="alertTwoInput('测试描述','标题','请输入name','请输入pass','取消','确定');">测试</button>
+    $.ajax({
+        type: "GET",
+        url: "/apis/wx/weixinbindrDoorSystem?mobile="+mobile,
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function(data){
+            console.info(data);
+            if(data.code=="0"){
+                $.hideLoading("门禁系统绑定成功!");
+                location.href=data.url;
+                // $.toptip('二维码获取成功',2000, 'success');
             }
         }
     });
