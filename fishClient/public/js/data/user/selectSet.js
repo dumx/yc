@@ -44,7 +44,8 @@ $(function () {
 function onUnifiedOrder(){
     console.info($("#totalMoney").val() / 100);
     var selectSeat=$("#selectSet").val()
-    if(selectSeat==null && selectSeat==""){
+    if(selectSeat==null || selectSeat==""){
+        $.toptip('请先选择座位!',2000, 'error');
         return;
     }
     $.ajax({
