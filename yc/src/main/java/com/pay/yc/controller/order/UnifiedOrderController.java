@@ -83,6 +83,13 @@ public class UnifiedOrderController {
     @ApiOperation(value = "微信预支付请求，创建微信订单。")
     @RequestMapping(value = "/weixin", method = RequestMethod.POST)
     public ResultDTO<?> generateWeixinUnifiedOrder(@RequestBody final WeixinParamBean wxParamBean) {
+        if(wxParamBean.getType().equals("ZHENG")){
+            Config config=this.configRepository.findByType(wxParamBean.getType());
+            UnifiedOrder unifiedOrder=this.unifiedOrderRepository.findByBeginTimeEqualsAndSeatNoAndStatus(config.getBeginTime(),wxParamBean.getSeatNo(),PaymentTradeStatus.SUCCESS);
+            if(unifiedOrder!=null){
+                return ResultDTO.failure("该座位已被购买或者正在被购买,请重新挑选座位!");
+            }
+        }
         User user=this.userRepository.findByOpenId(wxParamBean.getOpenId());
         if(user.getMobile()==null){
             return ResultDTO.failure();

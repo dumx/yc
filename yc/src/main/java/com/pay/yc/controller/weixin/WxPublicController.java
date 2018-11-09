@@ -1,7 +1,9 @@
 package com.pay.yc.controller.weixin;
 
+import com.pay.yc.common.annotation.CurrentUserId;
 import com.pay.yc.common.enumpub.PaymentTradeStatus;
 import com.pay.yc.common.result.dto.ResultDTO;
+import com.pay.yc.common.util.DateTimeUtils;
 import com.pay.yc.convertor.ConfigConvertor;
 import com.pay.yc.convertor.order.UnifiedOrderConvertor;
 import com.pay.yc.dto.admin.ConfigDTO;
@@ -75,7 +77,8 @@ public class WxPublicController {
 
 
     @GetMapping(value = "/getStartOrderList")
-    public ResultDTO<?> getStartOrderList(@RequestParam Long userId) {
+    public ResultDTO<?> getStartOrderList(@CurrentUserId Long userId) {
+        log.info("请求用户编号:"+userId);
         User user=this.userRepository.findOneById(userId);
         Specification<UnifiedOrder> specification=this.getWhereClause(userId,user.getOpenId(),null,PaymentTradeStatus.SUCCESS,new Date());
         List<UnifiedOrder> model = this.repositoryExecutor.findAll(specification);
@@ -86,13 +89,30 @@ public class WxPublicController {
 
 
     @GetMapping(value = "/getUnStartOrderList")
-    public ResultDTO<?> getUnStartOrderList(@RequestParam Long userId) {
+    public ResultDTO<?> getUnStartOrderList(@CurrentUserId Long userId) {
         User user=this.userRepository.findOneById(userId);
         Specification<UnifiedOrder> specification=this.getUnStartWhereClause(userId,user.getOpenId(),null,PaymentTradeStatus.SUCCESS,new Date());
         List<UnifiedOrder> model = this.repositoryExecutor.findAll(specification);
         List<UnifiedOrderDTO> result = this.unifiedOrderConvertor.toListDTO(model);
         log.info("获取我的未开始订单成功!,用户:"+userId);
         return ResultDTO.success(result);
+    }
+
+
+    /**
+     * 获取已卖出的座位号
+     * @param userId
+     * @return
+     */
+    @GetMapping(value = "/getSeatNoList")
+    public ResultDTO<?> getSeatNoList() {
+        Config config=this.configRepository.findByType("ZHENG");
+        //开始时间
+        Date beginTime=config.getBeginTime();
+
+        List<UnifiedOrder> model = this.unifiedOrderRepository.findSeatNoByBeginTimeEquals(beginTime);
+        log.info("获取已卖出的座位号成功!时间:"+ DateTimeUtils.formatDateToString(beginTime,DateTimeUtils.YYYYMMDDHHMMSS));
+        return ResultDTO.success(model);
     }
 
     /**

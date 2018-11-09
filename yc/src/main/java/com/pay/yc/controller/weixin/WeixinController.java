@@ -65,7 +65,7 @@ public class WeixinController {
 
     //token 相关
     static final long EXPIRATIONTIME = 432_000_000;     // 5天
-    static final String SECRET = "P@ssw02d";            // JWT密码
+    static final String SECRET = "P@ssw0222d";            // JWT密码
 
 
 //    @Value(value = "${webapp.url}")

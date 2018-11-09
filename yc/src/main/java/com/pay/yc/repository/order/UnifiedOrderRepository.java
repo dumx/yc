@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 public interface UnifiedOrderRepository extends Repository<UnifiedOrder, Long>{
@@ -42,5 +43,9 @@ public interface UnifiedOrderRepository extends Repository<UnifiedOrder, Long>{
    UnifiedOrder findOneById(Long id);
 
    List<UnifiedOrder> findAll();
+
+   List<UnifiedOrder> findSeatNoByBeginTimeEquals(Date beginTime);
+
+   UnifiedOrder findByBeginTimeEqualsAndSeatNoAndStatus(Date beginTime,Integer seatNo,PaymentTradeStatus status);
 
 }
