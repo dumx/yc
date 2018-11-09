@@ -30,7 +30,8 @@ $(function () {
 
                 }
             });
-        }
+        },
+
     };
     window.onload = function(){
         process.init();
@@ -79,7 +80,7 @@ function onUnifiedOrder(){
                 //调用微信支付
                 onBridgeReady();
             }else{
-                $.alert("网络异常!请稍后再试!");
+                $.alert(data.data);
             }
         }
     });

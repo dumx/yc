@@ -63,10 +63,11 @@ $(function () {
 
         //验证是否绑定手机号
          checkMobile:function () {
+            var openId=$.cookie("wxopenId");
             $.ajax({
                 type: "GET",
                 // url: "/apis/wx/checkMobile?openId="+$.cookie("wxopenId"),
-                url: "/apis/wx/checkMobile?openId=og9a21KfQaZ_xSA-VtZC1W9MuaK0",
+                url: "/apis/wx/checkMobile?openId="+openId,
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 //设置token

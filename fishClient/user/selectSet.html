@@ -167,19 +167,47 @@
 <script type="text/javascript" src="../public/js/app.js"></script>
 
 <script>
-    /**
-     * 已售座位ID
-     * @type inputNO
-     */
-    var yishou = [3,4,6,9,12,23,26,27,33,35];
-    for(var i in yishou){
-        $("input").each(function(){
-            if($(this).val()==yishou[i]){
-               $(this).css("-webkit-filter","grayscale(100%)");
-               $(this).css("box-shadow","#3a3a3a 1px 3px 3px 3px inset");
+    $(document).ready(function(){
+        getSeatInfo();
+    });
+
+    var yishou=[];
+    function getSeatInfo() {
+        $.ajax({
+            type: "GET",
+            url: "/apis/weixin/getSeatNoList",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            //设置token
+            beforeSend: function (request) {
+                request.setRequestHeader(tokenKey, $.cookie("token"));
+            },
+            success: function(data){
+                if(data.status=="success"){
+                    var result=data.data;
+                    console.info(data);
+                    for(var i=0;i<result.length;i++){
+                        yishou.push(result[i].seatNo);
+                    }
+                    /**
+                     * 已售座位ID
+                     * @type inputNO
+                     */
+                    console.info(yishou);
+                    for(var i in yishou){
+                        $("input").each(function(){
+                            if($(this).val()==yishou[i]){
+                                $(this).css("-webkit-filter","grayscale(100%)");
+                                $(this).css("box-shadow","#3a3a3a 1px 3px 3px 3px inset");
+                            }
+                        })
+                    }
+                }
             }
-        })
+        });
     }
+
+
 
     /**
      * 左侧座位长短设置

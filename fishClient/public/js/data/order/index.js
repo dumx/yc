@@ -162,8 +162,13 @@ function getStartOrderList() {
     $('#tab1 .order-content').html("");
     $.ajax({
         type: "GET",
-        url: "/apis/weixin/getStartOrderList?userId=4",
+        url: "/apis/weixin/getStartOrderList",
         dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        //设置token
+        beforeSend: function (request) {
+            request.setRequestHeader(tokenKey, $.cookie("token"));
+        },
         success: function(data){
             console.info(data);
             var result=data.data;
@@ -224,8 +229,13 @@ function getStartOrderList() {
 function getUnStartOrderList() {
     $.ajax({
         type: "GET",
-        url: "/apis/weixin/getUnStartOrderList?userId=4",
+        url: "/apis/weixin/getUnStartOrderList",
         dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        //设置token
+        beforeSend: function (request) {
+            request.setRequestHeader(tokenKey, $.cookie("token"));
+        },
         success: function(data){
             console.info(data);
             var result=data.data;
