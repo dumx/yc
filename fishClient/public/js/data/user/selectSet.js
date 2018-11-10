@@ -26,6 +26,11 @@ $(function () {
                         //正钓门票
                         $("#name").val(result[0].name);
                         $("#totalMoney").val(result[0].totalFee);
+
+                        var beginTime = new Date(result[0].beginTime).format("yyyy-MM-dd hh");
+                        var endTime = new Date(result[0].endTime).format("hh");
+                        $(".curr-time").html(beginTime+':00'+'-'+endTime+':00');
+                        $("#remark").html("温馨提示:"+result[0].remark);
                     }
 
                 }
@@ -100,6 +105,7 @@ function onBridgeReady(){
         // alert(res.err_msg);
         if(res.err_msg == "get_brand_wcpay_request:ok" ) {
             $.toptip('支付成功!',2000, 'success');
+            location.href="../order/index.html";
             // window.location.href="${obj.sendUrl}";
         }else{
             $.toptip('支付失败!',2000, 'error');

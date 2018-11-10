@@ -19,8 +19,8 @@
 </head>
 <body onbeforeunload="return exitWin()">
 <div class="main bot44">
-    <div class="now-time">
-        今天<span class="curr-time"></span>
+    <div class="now-time" style="font-size: 0.6rem;text-align: center">
+        时间:<span class="curr-time"></span>
     </div>
     <div id="set">
         <table style="width: 100%;">
@@ -126,7 +126,9 @@
         <div style="text-align: center;margin-top: 20px;">
             <!--<a href="javascript:void(0);" onclick="onUnifiedOrder();">确认支付</a>-->
             <a href="javascript:void(0);" class="button button-3d button-caution" onclick="onUnifiedOrder();">确认支付</a>
+            <div id="remark" style="margin-top: 20px;color: red"></div>
         </div>
+
 
         <!--<a href="http://www.bootcss.com/" class="button button-royal button-pill button-giant">Go</a>-->
     </div>
