@@ -44,7 +44,7 @@ public interface UnifiedOrderRepository extends Repository<UnifiedOrder, Long>{
 
    List<UnifiedOrder> findAll();
 
-   List<UnifiedOrder> findSeatNoByBeginTimeEquals(Date beginTime);
+   List<UnifiedOrder> findByBeginTimeEqualsAndStatus(Date beginTime,PaymentTradeStatus status);
 
    UnifiedOrder findByBeginTimeEqualsAndSeatNoAndStatus(Date beginTime,Integer seatNo,PaymentTradeStatus status);
 

@@ -110,7 +110,7 @@ public class WxPublicController {
         //开始时间
         Date beginTime=config.getBeginTime();
 
-        List<UnifiedOrder> model = this.unifiedOrderRepository.findSeatNoByBeginTimeEquals(beginTime);
+        List<UnifiedOrder> model = this.unifiedOrderRepository.findByBeginTimeEqualsAndStatus(beginTime,PaymentTradeStatus.SUCCESS);
         log.info("获取已卖出的座位号成功!时间:"+ DateTimeUtils.formatDateToString(beginTime,DateTimeUtils.YYYYMMDDHHMMSS));
         return ResultDTO.success(model);
     }
