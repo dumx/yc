@@ -277,7 +277,7 @@ function saveMobile() {
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({
-            "openId": "og9a21KfQaZ_xSA-VtZC1W9MuaK0",
+            "openId": $.cookie("wxopenId"),
             "mobile": $("#weui-prompt-input").val()
         }),
         success: function(data){
