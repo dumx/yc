@@ -159,7 +159,7 @@ function getTab(id) {
 
 //已开始
 function getStartOrderList() {
-    $('#tab1 .order-content').html("");
+
     $.ajax({
         type: "GET",
         url: "/apis/weixin/getStartOrderList",
@@ -170,6 +170,7 @@ function getStartOrderList() {
             request.setRequestHeader(tokenKey, $.cookie("token"));
         },
         success: function(data){
+            $('#tab1 .order-content').html("");
             console.info(data);
             var result=data.data;
             for(var i=0;i<result.length;i++){
@@ -237,6 +238,7 @@ function getUnStartOrderList() {
             request.setRequestHeader(tokenKey, $.cookie("token"));
         },
         success: function(data){
+            $('#tab2 .order-content').html("");
             console.info(data);
             var result=data.data;
             for(var i=0;i<result.length;i++){
