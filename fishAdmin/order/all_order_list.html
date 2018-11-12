@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>订单列表</title>
+    <meta name="keywords" content="Zzhsoft后台bootstrap框架.后台HTML,响应式后台">
+    <meta name="description" content="Zzhsoft一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题后台">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../css/font-awesome.min.css?v=4.7.0" rel="stylesheet">
+    <!-- Data Tables -->
+    <link href="../css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="../css/animate.css" rel="stylesheet">
+    <link href="../css/style.css?v=4.1.0" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h1>已完成订单
+                    </h1>
+                    <br>
+                    <div class="col-sm-2">
+                        <input  class="form-control" id="merchantId" placeholder="请输入商户号" value="">
+                    </div>
+                    <div class="col-sm-2">
+                        <input  class="form-control" id="orderNo" placeholder="请输入订单号" value="">
+                    </div>
+
+                    <button class="btn btn-primary " type="button"  onclick="getTable()"><i class="fa fa-check"></i>&nbsp;查询</button>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table id="orderTable" class="table table-striped table-bordered table-hover dataTables-example">
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 详情弹窗-->
+<div class="modal inmodal fade" id="myModal" tabindex="-1" role="dialog" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">订单详情</h4>
+                <!--<small class="font-bold"/>这里可以显示副标题。-->
+            </div>
+            <form class="modal-body" id="modelbody">
+                <div class="form-group"><label>订单号:</label> <input type="text"  class="form-control" id="orderId" name="orderNo" value=""></div>
+                <div class="form-group"><label>名称:</label> <input type="text" class="form-control" id="subjectName" name="subject" value=""></div>
+                <div class="form-group"><label>金额(单位:元):</label> <input type="text"  class="form-control" id="price" name="totalFee" value=""></div>
+                <div class="form-group"><label>支付方式:</label> <input type="text"  class="form-control" id="payType" name="payType" value=""></div>
+                <div class="form-group"><label>支付时间:</label> <input type="text"  class="form-control" id="timeEnd" name="timeEnd" value=""></div>
+                <div class="form-group"><label>用户:</label> <input type="text"  class="form-control" id="buyUser" name="username" value=""></div>
+                <div class="form-group"><label>下单时间:</label> <input type="text"  class="form-control" id="createdDate" name="createdDate" value=""></div>
+                <div class="form-group"><label>支付状态:</label> <input type="text"  class="form-control" id="status" name="status" value=""></div>
+                <div class="form-group"><label>完成时间:</label> <input type="text"  class="form-control" id="finishTime" name="finishTime" value=""></div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 全局js -->
+<script src="../js/jquery.min.js?v=2.1.4"></script>
+<script src="../js/bootstrap.min.js?v=3.3.6"></script>
+<script src="../js/plugins/jeditable/jquery.jeditable.js"></script>
+<!-- Data Tables -->
+<script src="../js/plugins/dataTables/jquery.dataTables.js"></script>
+<script src="../js/plugins/dataTables/dataTables.bootstrap.js"></script>
+<!-- 自定义js -->
+<script src="../js/content.js?v=1.0.0"></script>
+<script src="../js/jquery.cookie.js"></script>
+
+<!--页面必要-->
+<script src="../js/public.js"></script>
+<script src="../js/formloader.js"></script>
+<!-- layer javascript -->
+<script src="../js/plugins/layer/layer.min.js"></script>
+<script>
+    $(document).ready(function () {
+        getTable();
+//        var table = $('#orderTable').DataTable();
+//        $('#subject').on( 'keyup', function () {
+//            table.search( this.value ).draw();
+//        } );
+    });
+    //动态渲染datetable数据
+    function getTable() {
+        var subject=$("#subject").val();
+        var orderNo=$("#orderNo").val();
+        var table=$('#orderTable').dataTable( {
+            "destroy":true,//允许重新实例化Datatables
+            "searching":false,//开启搜索功能
+            "info":true,//开启Datatables信息显示
+            "autoWidth":true,//自动宽度
+            "processing":true,//显示加载信息
+            "paging": true,   //显示分页信息
+            "serverSide": true,   //服务器后台分页
+            "pagingType": "full_numbers",  //分页样式
+            "lengthChange":false,  //去掉每页显示多少条
+            "pageLength": 20,
+            "fnServerParams": function ( aoData )
+            {
+                aoData.page = aoData.start/20;  //一共页数
+                aoData.size = 20;               //每页显示数据条数
+                aoData.state="";    //参数状态暂定死
+                aoData.sort="createTime,desc";  //根据创建时间倒序排列
+                //查询参数
+                if(merchantId!=""){
+                    aoData.merchantId = $("#merchantId").val();
+                }
+                if(orderNo!=""){
+                    aoData.orderNo = $("#orderNo").val();
+                }
+            },
+            "ajax": {
+                type: "GET",
+                url: "/apis/webOrder/getAllOrder",
+                //设置token
+                beforeSend: function(request) {
+                    request.setRequestHeader(tokenKey, $.cookie(tokenKey));
+                },
+                "dataFilter": function(data){
+                    var json = jQuery.parseJSON( data );
+                    json.recordsFiltered = json.pageable.totalElements;
+                    json.recordsTotal = json.pageable.totalElements;
+                    return JSON.stringify( json ); // return JSON string
+                },
+//                "dataSrc": function (json) { // deal the data
+//                    return json.data;
+//                },
+                error: function (xhr, error, thrown) {
+                    if(xhr.status=="403"){
+                        parent.layer.msg("您的身份信息已过期,请重新登录");
+                        window.location.href=baseUrl;
+                    }else{
+                        parent.layer.msg("未知错误,请刷新后重试!");
+                    }
+                }
+            },
+            //判断某一列
+            "rowCallback": function( row, data, index ) {
+            },
+            //格式化数字显示格式
+            "language": {
+                "decimal":",",
+                "thousands":"."
+            },
+            "columns":[
+                {title:"编号",data:"id"},
+                {title:"商户号", data: "merchantId"},
+                {title:"支付配置",data:"alipayName"},
+                {title:"订单号",data:"orderNo"},
+                {title:"金额",data:"totalFee",
+                    "render": function ( data, type, full, meta ) {
+                        var dataStr = Number(data/100).toFixed(2);
+                        return dataStr;
+                    }
+                },
+                {title:"支付方式",data:"payType",
+                    "render": function ( data, type, full, meta ) {
+                        if (data == 1){
+                            var h="WAP";
+                            return h;
+                        }else{
+                            var h="当面付";
+                            return h;
+                        }
+                    }
+                },
+                {title:"创建时间",data:"createTime",
+                    "render": function ( data, type, full, meta ) {
+                        var dataStr = fmtDate(data);
+                        return dataStr;
+                    }
+                },
+                {title:"状态",data:"status",
+                    "render": function ( data, type, full, meta ) {
+                        if (data == "SUCCESS"){
+                            var h="<p style=\"color: green\">已完成</p>";
+                            return h;
+                        }else{
+                            var h="<p style=\"color: red\">未支付</p>";
+                            return h;
+                        }
+                    }
+                },
+                {title:"完成时间",data:"finishTime",
+                    "render": function ( data, type, full, meta ) {
+                        var dataStr = fmtDate(data);
+                        return dataStr;
+                    }
+                }
+            ]
+        } );
+    }
+    function getId(id){
+        alert(id);
+    }
+    //时间戳转日期
+    function fmtDate(obj){
+        var date =  new Date(obj);
+        var y = 1900+date.getYear();
+        var M = "0"+(date.getMonth()+1);
+        var d = "0"+date.getDate();
+
+        var h = "0"+date.getHours();
+        var m = "0"+date.getMinutes();
+        var s = "0"+date.getSeconds();
+        return y+"-"+M.substring(M.length-2,M.length)+"-"+d.substring(d.length-2,d.length)+" "+h.substring(h.length-2,h.length)+":"+m.substring(m.length-2,m.length)+":"+s.substring(s.length-2,s.length);
+    }
+    function openLayui(orderId) {
+        $.ajax({
+            type: "GET",
+            url: "/apis/order/getOrderDetail?orderId="+orderId+"",
+            //设置token
+            beforeSend: function(request) {
+                request.setRequestHeader(tokenKey, $.cookie(tokenKey));
+            },
+            dataType: "json",
+            success: function(data){
+                if(data.status=="success"){
+                    var o=data.data;
+                    if(o.status=="SUCCESS"){
+                        o.status="已支付";
+                    }
+                    //格式化创建时间
+                    data.data.createdDate=fmtDate(data.data.createdDate);
+                    //完成时间
+                    data.data.finishTime=fmtDate(data.data.finishTime);
+                    //支付时间
+                    data.data.timeEnd=fmtDate(data.data.timeEnd);
+                    //拼接地址
+                    data.data.addressModel.address=data.data.addressModel.firstTier+""+data.data.addressModel.address;
+                    //拼接授课时间
+                    data.data.teachingTime=data.data.teachingTime+" "+data.data.startTime+":00-"+data.data.endTime+":00";
+                    //自动匹配form表单input标签name值进行赋值操作
+                    $("#modelbody").formloader({data:data.data});
+                }
+            }
+        });
+        $("#myModal").modal("show");
+    }
+
+
+</script>
+</body>
+
+</html>

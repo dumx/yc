@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="pragma" content="no-cache"/>
+    <title>用户列表</title>
+    <meta name="keywords" content="支付系统后台">
+    <meta name="description" content="支付系统后台">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../css/font-awesome.min.css?v=4.7.0" rel="stylesheet">
+    <!-- Data Tables -->
+    <link href="../css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="../css/animate.css" rel="stylesheet">
+    <link href="../css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="../css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../js/plugins/select2/css/select2.css" rel="stylesheet">
+</head>
+<style>
+    .select2-drop {
+        z-index: 10050 !important;
+    }
+
+    .select2-search-choice-close {
+        margin-top: 0 !important;
+        right: 2px !important;
+        min-height: 10px;
+    }
+
+    .select2-search-choice-close:before {
+        color: black !important;
+    }
+    /*防止select2不会自动失去焦点*/
+    .select2-container {
+        z-index: 16000 !important;
+    }
+
+    .select2-drop-mask {
+        z-index: 15990 !important;
+    }
+
+    .select2-drop-active {
+        z-index: 15995 !important;
+    }
+
+</style>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h1>用户列表
+                    </h1>
+                    <br>
+                    <div class="col-sm-2">
+                        <input class="form-control" id="searchUsername" placeholder="请输入用户名" value="">
+                    </div>
+                    <div class="col-sm-2">
+                        <input class="form-control" id="searchMobile" placeholder="请输入手机号" value="">
+                    </div>
+                    <button class="btn btn-primary " type="button" onclick="getTable()"><i class="fa fa-check"></i>&nbsp;查询
+                    </button>
+                    <button class="btn btn-primary " type="button" onclick="saveUser()"><i class="fa fa-check"></i>&nbsp;新增
+                    </button>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table id="userTable" class="table table-striped table-bordered table-hover dataTables-example">
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 新增商户-->
+    <div class="modal inmodal fade" id="myModal" tabindex="-1">
+    <div class="modal-dialog modal-lg" >
+            <div class="modal-content" style="height: 520px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title">新增商户</h4>
+                <!--<small class="font-bold"/>这里可以显示副标题。-->
+            </div>
+
+            <div class="form-horizontal m-t">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">商户号：</label>
+                    <div class="col-sm-8">
+                        <input id="merchantNo" name="merchantNo" minlength="2" type="text" class="form-control" required=""
+                               aria-required="true">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">登录名：</label>
+                    <div class="col-sm-8">
+                        <input id="username" name="username" minlength="2" type="text" class="form-control" required=""
+                               aria-required="true">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">密码：</label>
+                    <div class="col-sm-8">
+                        <input id="password" name="password" minlength="2" type="password" class="form-control"
+                               required="" aria-required="true">
+                    </div>
+                </div>
+                <!--<div class="form-group">-->
+                    <!--<label class="col-sm-3 control-label">手机号：</label>-->
+                    <!--<div class="col-sm-8">-->
+                        <!--<input id="mobile" name="mobile" class="form-control" required="" aria-required="true">-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">公钥：</label>
+                    <div class="col-sm-8">
+                        <textarea id="publicKey" type="text" class="form-control" name="publicKey"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">回调地址：</label>
+                    <div class="col-sm-8">
+
+                        <input id="notifyUrl" type="text" class="form-control" name="notifyUrl" required=""
+                               aria-required="true">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">费率：</label>
+                    <div class="col-sm-8">
+
+                        <input id="rate" type="text" class="form-control" name="rate" required=""
+                               aria-required="true">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">商户配置：</label>
+                    <div class="col-sm-8" id="select2html">
+                        <select class="combox" id="sel_productTag" name="tagId" multiple>
+                        </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4 col-sm-offset-3">
+                        <button class="btn btn-primary" onclick="save()" type="submit">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 编辑弹窗-->
+<div class="modal inmodal fade" id="modalEdit" tabindex="-1" role="dialog" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">编辑商户</h4>
+                <!--<small class="font-bold"/>这里可以显示副标题。-->
+            </div>
+            <form class="modal-body" id="modelbody">
+                <input type="text" style="display: none" id="id" value="">
+                <div class="form-group"><label>商户号:</label> <input type="text"  class="form-control" id="newMerchantNo" name="newMerchantNo" value=""></div>
+                <div class="form-group"><label>登录名:</label> <input type="text"  class="form-control" id="newUsername" name="newUsername" value=""></div>
+                <div class="form-group"><label>密码:</label> <input type="text"  class="form-control" id="newPassword" name="newPassword" value=""></div>
+                <div class="form-group"><label>公钥:</label> <input type="text"  class="form-control" id="newPublicKey" name="newPublicKey" value=""></div>
+                <div class="form-group"><label>回调地址:</label> <input type="text"  class="form-control" id="newNotifyUrl" name="NewNotifyUrl" value=""></div>
+                <div class="form-group"><label>费率:</label> <input type="text"  class="form-control" id="newRate" name="newRate" value=""></div>
+                <div class="form-group"><label>商户配置:</label>
+                    <select class="combox" id="newSel_productTag" name="tagId" multiple>
+                    </select>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="editPush()">提交</button>
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 全局js -->
+<script src="../js/jquery.min.js?v=2.1.4"></script>
+<script src="../js/bootstrap.min.js?v=3.3.6"></script>
+<!--<script src="../js/plugins/jeditable/jquery.jeditable.js"></script>-->
+<script src="../js/plugins/select2/js/select2.js"></script>
+<script src="../js/plugins/select2/js/select2.full.js"></script>
+<!-- Data Tables -->
+<script src="../js/plugins/dataTables/jquery.dataTables.js"></script>
+<script src="../js/plugins/dataTables/dataTables.bootstrap.js"></script>
+<!-- 自定义js -->
+<script src="../js/content.js?v=1.0.0"></script>
+<script src="../js/jquery.cookie.js"></script>
+
+<!-- layer javascript -->
+<script src="../js/plugins/layer/layer.min.js"></script>
+<script src="../js/plugins/toastr/toastr.min.js"></script>
+
+<!--页面必要-->
+<script src="../js/public.js"></script>
+<script src="../js/formloader.js"></script>
+<script src="../js/md5.js"></script>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#sel_productTag').select2({
+            placeholder: "请至少选择一个配置",
+            tags:true,
+            createTag:function (decorated, params) {
+                return null;
+            },
+            width:'256px',
+            dropdownParent:$("#myModal")//设置父 model  处理和 bootstrap modal 冲突
+        });
+
+        $('#newSel_productTag').select2({
+            placeholder: "请至少选择一个配置",
+            tags:true,
+            createTag:function (decorated, params) {
+                return null;
+            },
+            width:'256px',
+            dropdownParent:$("#modalEdit")//设置父 model  处理和 bootstrap modal 冲突
+        });
+//        function formatState (state) {
+//            if (!state.id) { return state.text; }
+//            var $state = $(
+//                '<span>' + state.text + '</span>'
+//            );
+//            return $state;
+//        };
+
+//        $('#sel_recommender').select2({
+//            placeholder: "请选择一个人名",
+//            templateResult: formatState,
+//            width:'256px'
+//        });
+
+        //获取商户配置下拉框
+        getAliPayConfig();
+        getTable();
+    });
+
+    //动态渲染datetable数据
+    function getTable() {
+        var mobile = $("#searchMobile").val();
+        var username = $("#searchUsername").val();
+        var table = $('#userTable').dataTable({
+            "destroy": true,//允许重新实例化Datatables
+            "searching": false,//开启搜索功能
+            "info": true,//开启Datatables信息显示
+            "autoWidth": true,//自动宽度
+            "processing": true,//显示加载信息
+            "paging": true,   //显示分页信息
+            "serverSide": true,   //服务器后台分页
+            "pagingType": "full_numbers",  //分页样式
+            "lengthChange": false,  //去掉每页显示多少条
+            "fnServerParams": function (aoData) {
+                aoData.page = aoData.start / 10;  //一共页数
+                aoData.size = 10;               //每页显示数据条数
+                //aoData.state="COMPLETED";    //参数状态暂定死
+                aoData.sort = "createdDate,desc";  //根据创建时间倒序排列
+                //查询参数
+                if (username != "") {
+                    aoData.username = $("#searchUsername").val();
+                }
+                if (mobile != "") {
+                    aoData.mobile = $("#searchMobile").val();
+                }
+            },
+            "ajax": {
+                type: "GET",
+                url: "/apis/u/getUserList",
+                //设置token
+                beforeSend: function (request) {
+                    request.setRequestHeader(tokenKey, $.cookie(tokenKey));
+                },
+                "dataFilter": function (data) {
+                    var json = jQuery.parseJSON(data);
+                    json.recordsFiltered = json.pageable.totalElements;
+                    json.recordsTotal = json.pageable.totalElements;
+                    return JSON.stringify(json); // return JSON string
+                },
+//                "dataSrc": function (json) { // deal the data
+//                    return json.data;
+//                },
+                error: function (xhr, error, thrown) {
+                    if (xhr.status == "403") {
+                        reLogin();
+                    } else {
+                        parent.layer.msg("未知错误,请刷新后重试!");
+                    }
+                }
+            },
+            //判断某一列
+            "rowCallback": function (row, data, index) {
+            },
+            //格式化数字显示格式
+            "language": {
+                "decimal": ",",
+                "thousands": "."
+            },
+            "columns": [
+                {title: "编号", data: "id"},
+                {title: "商户号", data: "merchantNo"},
+                {
+                    title: "登录名", data: "username",
+//                    "render": function (data, type, full, meta) {
+//                        var d = "<a href='#' data-toggle='modal' onclick='openUserDetail(" + full.id + ")'>" + data + "</a>";
+//                        return d;
+//                    }
+                },
+
+                {
+                    title: "创建时间", data: "createTime",
+                    "render": function (data, type, full, meta) {
+                        var dataStr = fmtDate(data);
+                        return dataStr;
+                    }
+                },
+//                {title: "商户状态", data: "lastLoginTime",
+//                    "render": function (data, type, full, meta) {
+//                        var dataStr = fmtDate(data);
+//                        return dataStr;
+//                    }
+//                },
+                {title: "费率", data: "rate"},
+                {title: "余额", data: "balance"},
+                {title:"商户状态",data:"status",
+                    "render": function ( data, type, full, meta ) {
+                        var h;
+                        if (data == "1"){
+                            h="<p>正常</p>";
+                            return h;
+                        }else if (data == "2"){
+                            h="<p>禁用</p>";
+                            return h;
+                        }else if (data == "3"){
+                            h="<p>黑名单</p>";
+                            return h;
+                        }else if (data == "4"){
+                            h="<p>正在申请</p>";
+                            return h;
+                        }else {
+                            h="<p>注销</p>";
+                            return h;
+                        }
+                    }
+                },
+                {
+                    title: "操作", data: "id",
+                    "render": function (data, type, full, meta) {
+                        var id = data;
+                        var edithtml = "<button class=\"btn btn-info\" type=\"button\" onclick='openEdit(" + id + ")'>编辑</button> "
+                        return edithtml;
+                    }
+
+                }
+
+            ]
+        });
+
+    }
+
+    //新增用户
+    function saveUser() {
+        $("#merchantNo").val("");
+        $("#username").val("");
+        $("#password").val("");
+        $("#publicKey").val("");
+        $("#notifyUrl").val("");
+        $("#rate").val("");
+        $("#myModal").modal("show");
+    }
+    function save() {
+        //获取 text 值
+//        var select2Value=$("#sel_productTag option:selected").text();
+        var alipayConfigList = [];
+        //获取选中的 value 值
+        $("#sel_productTag option:selected").each(function () {
+            alipayConfigList.push($(this).val())
+        })
+        if ($("#merchantNo").val() == "") {
+            return;
+        }
+        if ($("#username").val() == "") {
+            return;
+        }
+        if ($("#password").val() == "") {
+            return;
+        }
+        if ($("#publicKey").val() == "") {
+            return;
+        }
+        if ($("#notifyUrl").val() == "") {
+            return;
+        }
+        if ($("#rate").val() == "") {
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/apis/u/saveUser",
+            dataType: "json",
+            data: JSON.stringify({
+                "merchantNo": $("#merchantNo").val(),
+                "username": $("#username").val(),
+                "password": $("#password").val(),
+                "publicKey": $("#publicKey").val(),
+                "alipayConfigList":alipayConfigList,
+                "notifyUrl": $("#notifyUrl").val(),
+                "rate": $("#rate").val(),
+            }),
+            contentType: "application/json; charset=utf-8",
+            //设置token
+            beforeSend: function (request) {
+                request.setRequestHeader(tokenKey, $.cookie(tokenKey));
+            },
+            success: function (result) {
+                if (result.status == "success") {
+                    $("#myModal").modal("hide");
+                    Command: toastr[result.status]("商户添加成功!")
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "progressBar": true,
+                        "positionClass": "toast-top-right",
+                        "onclick": null,
+                        "showDuration": "400",
+                        "hideDuration": "1000",
+                        "timeOut": "7000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                } else {
+                    $("#myModal").modal("hide");
+                    Command: toastr["error"](result.data)
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "progressBar": true,
+                        "positionClass": "toast-top-right",
+                        "onclick": null,
+                        "showDuration": "400",
+                        "hideDuration": "1000",
+                        "timeOut": "7000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                }
+            }
+        });
+    }
+
+    //时间戳转日期
+    function fmtDate(obj) {
+        var date = new Date(obj);
+        var y = 1900 + date.getYear();
+        var M = "0" + (date.getMonth() + 1);
+        var d = "0" + date.getDate();
+
+        var h = "0" + date.getHours();
+        var m = "0" + date.getMinutes();
+        var s = "0" + date.getSeconds();
+        return y + "-" + M.substring(M.length - 2, M.length) + "-" + d.substring(d.length - 2, d.length) + " " + h.substring(h.length - 2, h.length) + ":" + m.substring(m.length - 2, m.length) + ":" + s.substring(s.length - 2, s.length);
+    }
+
+    function openCharge(id) {
+        $("#userId").val(id);
+        $("#myRecharge").modal("show");
+    }
+
+    //打开商户编辑页面,回显
+    function openEdit(id) {
+        $.ajax({
+            type: "GET",
+            url: "/apis/u/queryById?uid="+id,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            //设置token
+            beforeSend: function (request) {
+                request.setRequestHeader(tokenKey, $.cookie(tokenKey));
+            },
+            success: function (result) {
+                if (result.status == "success") {
+                    var data=result.data;
+                    $("#id").val(data.id);
+                    $("#newMerchantNo").val(data.merchantNo);
+                    $("#newUsername").val(data.username);
+                    $("#newPassword").val(data.password);
+                    $("#newPublicKey").val(data.publicKey);
+                    $("#newNotifyUrl").val(data.notifyUrl);
+                    $("#newRate").val(data.rate);
+                    $("#newSel_productTag").val(data.alipayConfigList).trigger("change");
+                } else {
+                    $("#myModal").modal("hide");
+                }
+            }
+        });
+
+        $("#modalEdit").modal("show");
+
+    }
+    //提交修改商户
+    function editPush() {
+        var newAlipayConfigList = [];
+        //获取选中的 value 值
+        $("#newSel_productTag option:selected").each(function () {
+            newAlipayConfigList.push($(this).val())
+        })
+        $.ajax({
+            type: "POST",
+            url: "/apis/u/edit?uid="+$("#id").val(),
+            dataType: "json",
+            data: JSON.stringify({
+                "merchantNo": $("#newMerchantNo").val(),
+                "username": $("#newUsername").val(),
+                "password": $("#newPassword").val(),
+                "publicKey": $("#newPublicKey").val(),
+                "alipayConfigList":newAlipayConfigList,
+                "notifyUrl": $("#newNotifyUrl").val(),
+                "rate": $("#newRate").val(),
+            }),
+            contentType: "application/json; charset=utf-8",
+            //设置token
+            beforeSend: function (request) {
+                request.setRequestHeader(tokenKey, $.cookie(tokenKey));
+            },
+            success: function (result) {
+                if (result.status == "success") {
+                    $("#modalEdit").modal("hide");
+                    Command: toastr[result.status]("商户修改成功!")
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "progressBar": true,
+                        "positionClass": "toast-top-right",
+                        "onclick": null,
+                        "showDuration": "400",
+                        "hideDuration": "1000",
+                        "timeOut": "7000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                } else {
+                    $("#modalEdit").modal("hide");
+                    Command: toastr["error"](result.data)
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "progressBar": true,
+                        "positionClass": "toast-top-right",
+                        "onclick": null,
+                        "showDuration": "400",
+                        "hideDuration": "1000",
+                        "timeOut": "7000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                }
+            }
+        });
+        $("#modalEdit").modal("show");
+    }
+
+    function charge() {
+        var userId = $("#userId").val();
+        var money = $("#money").val();
+        var chargePwd = $("#chargePwd").val();
+        if (money == "" || chargePwd == "") {
+            return;
+        }
+        var curTime = new Date().getTime();
+        $.ajax({
+            type: "POST",
+            url: "/apis/u/addRecharge?userId=" + userId + "&money=" + money * 100 + "&chargePwd=" + hex_md5(chargePwd+curTime)+"&curTime="+curTime,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            //设置token
+            beforeSend: function (request) {
+                request.setRequestHeader(tokenKey, $.cookie(tokenKey));
+            },
+            success: function (result) {
+                console.info(result.status);
+                if (result.status == "success") {
+                    $("#myRecharge").modal("hide");
+                    showMsgBox(result.status, "充值成功!");
+                    getTable();
+                } else {
+                    var type = "error";
+                    var msg = result.data;
+                    showMsgBox(type, msg);
+                }
+            }
+        });
+    }
+
+
+
+//    //获取商户配置下拉框
+    function getAliPayConfig() {
+
+        var str = " <label class='control-label'></label>";
+        $.ajax({
+            type: "GET",
+            url: "/apis/u/getAliPayConfig",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            //设置token
+            beforeSend: function (request) {
+                request.setRequestHeader(tokenKey, $.cookie(tokenKey));
+            },
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                   str += "<option name='checkbox' value='" + result[i].id + "'>" + result[i].alipayAccount + "  </option>";
+                }
+                $("#sel_productTag").html(str);
+                //回显
+                $("#newSel_productTag").html(str);
+            }
+        });
+    }
+
+</script>
+</body>
+
+</html>

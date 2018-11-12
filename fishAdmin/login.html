@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>支付系统 - 登录</title>
+    <meta name="keywords" content="支付系统后台">
+    <meta name="description" content="支付系统后台">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css?v=4.7.0" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/login.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+    <script>
+        if (window.top !== window.self) {
+            window.top.location = window.location;
+        }
+    </script>
+<style>
+    body{
+        position: fixed;
+        left: 0;
+        top: 0;
+        background: url(/img/login-bg.jpg) no-repeat;
+        -moz-background-size:100% 100%;
+        background-size:100% 100%;
+    }
+</style>
+</head>
+
+<body id="login-bg">
+<canvas id="demo-canvas" width="100%" height="100%"></canvas>
+
+<div class="middle-box text-center loginscreen  animated fadeInDown" style="position:fixed;top: 18%;right: 10%;z-index: 9999999">
+    <div>
+        <div>
+            <h1 class="logo-name">支&nbsp;付&nbsp;系&nbsp;统</h1>
+
+        </div>
+        <h3>欢迎使用支付系统管理后台</h3>
+        <div class="m-t" role="form" id="loginForm">
+            <div class="form-group">
+                <input type="mobile" class="form-control" placeholder="用户名" required="" id="mobile">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="密码" required="" id="password">
+            </div>
+            <button type="button" class="btn btn-primary block full-width m-b" onclick="login()">登 录</button>
+            <!--<p class="text-muted text-center"> <a href="login.html#"><small>忘记密码了？</small></a>-->
+            <!--&lt;!&ndash;| <a href="register.html">注册一个新账号</a>&ndash;&gt;-->
+            <!--</p>-->
+        </div>
+    </div>
+</div>
+
+<!--[if IE]>
+<script src="js/starjs/html5.js"></script>
+<![endif]-->
+<script src="js/starjs/TweenLite.min.js"></script>
+<script src="js/starjs/EasePack.min.js"></script>
+<script src="js/starjs/rAF.js"></script>
+<script src="js/starjs/demo-1.js"></script>
+
+<!-- 全局js -->
+<script src="js/jquery.min.js?v=2.1.4"></script>
+<script src="js/bootstrap.min.js?v=3.3.6"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/public.js"></script>
+<!-- layer javascript -->
+<script src="js/plugins/layer/layer.min.js"></script>
+</body>
+<script>
+    function login() {
+        $.ajax({
+            url: "/apis/login",
+            type: "post",
+            //设置
+            beforeSend: function (request) {
+                request.setRequestHeader("username", $("#mobile").val());
+                request.setRequestHeader("password", $("#password").val());
+            },
+            success: function (data) {
+                //设置cookie过期时间
+                var date = new Date();
+                date.setTime(date.getTime() + 60 * 60 * 1000);//token过期时间,第一个60分钟
+                var token = data.result;
+                $.cookie(tokenKey, token, {expires: date});
+                localStorage.setItem("userInfo",data.userInfo);
+//                localStorage.setItem("userInfo",JSON.stringify(data.userInfo));
+                window.location.href = baseUrl + "/index.html";
+            },
+            error: function (e) {
+                parent.layer.msg("用户名或密码错误！！");
+            }
+        });
+    }
+
+    $(document).keyup(function (e) {//捕获文档对象的按键弹起事件
+        if (e.keyCode == 13) {//按键信息对象以参数的形式传递进来了
+            login();
+        }
+    });
+</script>
+
+</html>
