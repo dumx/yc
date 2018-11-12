@@ -5,7 +5,8 @@
 */
 
 //根地址
-var baseUrl = window.location.origin;
+var baseUrl = window.location.origin+"/admin";
+
 //tokenKey值
 var tokenKey = "Authentication";
 //图片 url 前缀
@@ -43,6 +44,7 @@ function logout(){
 
 function reLogin(){
     parent.layer.msg("您的身份信息已过期,请重新登录");
+    console.info(baseUrl);
     top.location.href = baseUrl + "/login.html";
 }
 
