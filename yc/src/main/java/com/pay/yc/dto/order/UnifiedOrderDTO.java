@@ -69,12 +69,6 @@ public class UnifiedOrderDTO extends AbstractDTO {
      */
     private Date finishTime;
 
-    /**
-     * 支付方式
-     * @return
-     */
-    private Integer payType;
-
 
     /**
      * 开始日期(取年月日)
@@ -94,6 +88,8 @@ public class UnifiedOrderDTO extends AbstractDTO {
     private String configRemark;
 
     private Integer seatNo;
+
+    private String mobile;
 
     public static UnifiedOrderDTO build(){
         return new UnifiedOrderDTO();

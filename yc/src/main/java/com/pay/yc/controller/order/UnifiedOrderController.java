@@ -111,6 +111,7 @@ public class UnifiedOrderController {
         unifiedOrder.setSubject(wxParamBean.getSubject());
         //微信公众号内支付需传openId
         unifiedOrder.setOpenId(wxParamBean.getOpenId());
+        unifiedOrder.setUserId(user.getId());
 
         //签名信息在Service中添加。
         unifiedOrder.setType(PaymentOrderType.WEIXIN);

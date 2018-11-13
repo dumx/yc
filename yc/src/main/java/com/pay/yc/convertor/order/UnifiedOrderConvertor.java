@@ -4,8 +4,10 @@ import com.pay.yc.common.result.AbstractConvertor;
 import com.pay.yc.constants.Constants;
 import com.pay.yc.dto.order.UnifiedOrderDTO;
 import com.pay.yc.model.admin.Config;
+import com.pay.yc.model.admin.User;
 import com.pay.yc.model.order.UnifiedOrder;
 import com.pay.yc.repository.admin.ConfigRepository;
+import com.pay.yc.repository.admin.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +26,9 @@ public class UnifiedOrderConvertor extends AbstractConvertor<UnifiedOrder, Unifi
 
     @Autowired
     private ConfigRepository configRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public UnifiedOrder toModel(UnifiedOrderDTO dto, UnifiedOrder model) {
         if(model == null) {
@@ -70,6 +75,9 @@ public class UnifiedOrderConvertor extends AbstractConvertor<UnifiedOrder, Unifi
 
         Config config=this.configRepository.findByType(model.getOrderType());
         dto.setConfigRemark(config.getRemark());
+
+        User user=this.userRepository.findOneById(model.getUserId());
+        dto.setMobile(user.getMobile());
         return dto;
     }
 

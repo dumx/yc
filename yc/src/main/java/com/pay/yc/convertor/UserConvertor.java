@@ -43,12 +43,7 @@ public class UserConvertor extends AbstractConvertor<User, UserDTO> {
         dto.setUsername(model.getUsername());
         dto.setMobile(model.getMobile());
         dto.setCreateTime(model.getCreatedDate());
-//        PaymentAccount paymentAccount = paymentAccountRepository.findTopByUserId(model.getId());
-//        double b=paymentAccount.getBalance().longValue() * 1.0  /100;
-//        BigDecimal balacne=new BigDecimal(b);
-        //设置小数位数，第一个变量是小数位数，第二个变量是取舍方法(四舍五入)
-//        balacne=balacne.setScale(2, BigDecimal.ROUND_HALF_UP);
-//        dto.setBalance(balacne);
+        dto.setOpenId(model.getOpenId());
         return dto;
     }
 
