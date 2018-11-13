@@ -34,24 +34,24 @@
 <body class="gray-bg">
 <div class="wrapper wrapper-content">
     <div class="row">
-        <div class="col-sm-3">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span class="label label-success pull-right">单位(元)</span>
-                    <h5>余额</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins" id="myMoney">0.00</h1>
-                    <div class="stat-percent font-bold text-success"><i class="fa fa-bolt"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!--<div class="col-sm-3">-->
+            <!--<div class="ibox float-e-margins">-->
+                <!--<div class="ibox-title">-->
+                    <!--<span class="label label-success pull-right">单位(元)</span>-->
+                    <!--<h5>余额</h5>-->
+                <!--</div>-->
+                <!--<div class="ibox-content">-->
+                    <!--<h1 class="no-margins" id="myMoney">0.00</h1>-->
+                    <!--<div class="stat-percent font-bold text-success"><i class="fa fa-bolt"></i>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
         <div class="col-sm-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <span class="label label-info pull-right">今天</span>
-                    <h5>充值金额</h5>
+                    <h5>金额</h5>
                 </div>
                 <div class="ibox-content">
                     <h1 class="no-margins" id="todayCharge">0.00</h1>
@@ -60,19 +60,19 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-3" id="adminAgent">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span class="label label-primary pull-right">今天</span>
-                    <h5>代付金额</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins" id="agent">0.00</h1>
-                    <div class="stat-percent font-bold text-navy"><i class="fa fa-level-up"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!--<div class="col-sm-3" id="adminAgent">-->
+            <!--<div class="ibox float-e-margins">-->
+                <!--<div class="ibox-title">-->
+                    <!--<span class="label label-primary pull-right">今天</span>-->
+                    <!--<h5>代付金额</h5>-->
+                <!--</div>-->
+                <!--<div class="ibox-content">-->
+                    <!--<h1 class="no-margins" id="agent">0.00</h1>-->
+                    <!--<div class="stat-percent font-bold text-navy"><i class="fa fa-level-up"></i>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
         <div class="col-sm-3" id="adminUser" style="display: none">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -194,7 +194,7 @@
                 }
             },
             legend: {
-                data:['充值金额','提现金额']
+                data:['订单数量']
             },
             toolbox: {
                 feature: {
@@ -221,14 +221,7 @@
             ],
             series : [
                 {
-                    name:'充值金额',
-                    type:'line',
-                    stack: '总量',
-                    areaStyle: {},
-                    data:[]
-                },
-                {
-                    name:'提现金额',
+                    name:'订单数量',
                     type:'line',
                     stack: '总量',
                     areaStyle: {},
@@ -239,7 +232,7 @@
 
         $.ajax({
             type: "GET",
-            url: "/apis/wdo/getPaymentChart",
+            url: "/apis/webOrder/getPaymentChart",
             dataType: "json",
             //设置token
             beforeSend: function (request) {
@@ -250,14 +243,15 @@
                 return JSON.stringify(json); // return JSON string
             },
             success: function (result) {
+                console.info(result);
                 for (var i in result.data) {
                     dateArr.push(result.data[i].date);
-                    chargeData.push(result.data[i].sumcharge/100);
-                    payData.push(result.data[i].sumpay/100);
+                    chargeData.push(result.data[i].orderCount);
+//                    payData.push(result.data[i].sumpay/100);
                 }
                 option.xAxis[0].data = dateArr;
                 option.series[0].data = chargeData;
-                option.series[1].data = payData;
+//                option.series[1].data = payData;
                 if (option && typeof option === "object") {
                     myChart.setOption(option, true);
                 }
@@ -270,7 +264,7 @@
         $("#adminUser").show();
         $.ajax({
             type: "GET",
-            url: "/apis/wdu/getAdminMoney",
+            url: "/apis/u/getIndexInfo",
             dataType: "json",
             //设置token
             beforeSend: function (request) {
@@ -283,19 +277,19 @@
             success: function (result) {
                 if (result.status == "success") {
                     var json = result.data;
-                    var targetPrice = json.balanceAmt / 100;
+//                    var targetPrice = json.balanceAmt / 100;
                     var todayCharge = json.todayCharge / 100;
                     var userNum = json.userSize;
-                    var agentNum = json.agentNum / 100;
-                    $("#myMoney").html(targetPrice.toFixed(2));
+//                    var agentNum = json.agentNum / 100;
+//                    $("#myMoney").html(targetPrice.toFixed(2));
                     $("#todayCharge").html(todayCharge.toFixed(2));
-                    $("#agent").html(agentNum.toFixed(2));
+//                    $("#agent").html(agentNum.toFixed(2));
                     $("#userNum").html(userNum);
                 } else {
                     $("#myMoney").html("0.00");
                     $("#todayCharge").html("0.00");
                     $("#userNum").html(0);
-                    $("#agent").html("0.00");
+//                    $("#agent").html("0.00");
                 }
             },
             error: function (xhr, error, thrown) {

@@ -11,8 +11,8 @@
     <meta http-equiv="pragma" content="no-cache"/>
     <title>鱼池系统后台 - 主页</title>
 
-    <meta name="keywords" content="支付系统管理后台">
-    <meta name="description" content="支付系统管理后台">
+    <meta name="keywords" content="鱼池系统管理后台">
+    <meta name="description" content="鱼池系统管理后台">
 
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html"/>
@@ -146,7 +146,7 @@
                     data-id="index_v3.html" seamless></iframe>
         </div>
         <div class="footer">
-            <div class="pull-right">&copy; 2018-2019 <a href="www.baidu.com" target="_blank">支付系统</a>
+            <div class="pull-right">&copy; 2018-2019 <a href="www.baidu.com" target="_blank">鱼池系统</a>
             </div>
         </div>
     </div>
@@ -675,7 +675,7 @@
         }
         $.ajax({
             type: "POST",
-            url: "/apis/wdu/resetPwd",
+            url: "/apis/u/resetPwd",
             dataType: "json",
             data: JSON.stringify({
                 "oldPwd": $("#oldPwd").val(),

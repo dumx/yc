@@ -118,9 +118,9 @@
                 aoData.state="";    //参数状态暂定死
                 aoData.sort="createTime,desc";  //根据创建时间倒序排列
                 //查询参数
-                if(merchantId!=""){
-                    aoData.merchantId = $("#merchantId").val();
-                }
+//                if(merchantId!=""){
+//                    aoData.merchantId = $("#merchantId").val();
+//                }
                 if(orderNo!=""){
                     aoData.orderNo = $("#orderNo").val();
                 }
@@ -188,8 +188,13 @@
                 },
                 {title:"完成时间",data:"finishTime",
                     "render": function ( data, type, full, meta ) {
-                        var dataStr = fmtDate(data);
-                        return dataStr;
+                        if(data!=null){
+                            var dataStr = fmtDate(data);
+                            return dataStr;
+                        }else{
+                            return "";
+                        }
+
                     }
                 },
                 {title:"开始时间",data:"beginTime",
