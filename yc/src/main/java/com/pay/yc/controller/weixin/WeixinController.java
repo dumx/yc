@@ -132,8 +132,6 @@ public class WeixinController {
         JSONObject tokenMap = new Gson().fromJson(tokenStr, JSONObject.class);
         String token = tokenMap.getString("access_token");
 
-        log.info("获取二维码111111111token==============================:"+tokenStr);
-        log.info("获取二维码222222222token==============================:"+ tokenMap.getString("access_token"));
         log.info("获取二维码token==============================:"+token);
 
         //获取二维码
@@ -142,7 +140,7 @@ public class WeixinController {
         bind.put("tel",mobile);
         bind.put("devid","215093");
         String bindResult = httpUrlConnection("https://api.parkline.cc/api/wxbind", bind);
-        log.info("获取二维码==============================:"+bindResult);
+        log.info("获取二维码生成链接==============================:"+bindResult);
         JSONObject jsonObject=JSONObject.parseObject(bindResult);
         String code=jsonObject.getString("code");
         String url=jsonObject.getString("url");
