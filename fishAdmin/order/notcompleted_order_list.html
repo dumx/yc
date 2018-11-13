@@ -25,9 +25,9 @@
                         <!--<small>未完成</small>-->
                     </h1>
                     <br>
-                    <div class="col-sm-2">
-                        <input class="form-control" id="merchantId" placeholder="请输入商户号" value="">
-                    </div>
+                    <!--<div class="col-sm-2">-->
+                        <!--<input class="form-control" id="merchantId" placeholder="请输入商户号" value="">-->
+                    <!--</div>-->
                     <div class="col-sm-2">
                         <input class="form-control" id="orderNo" placeholder="请输入订单号" value="">
                     </div>
@@ -163,8 +163,8 @@
             },
             "columns":[
                 {title:"编号",data:"id"},
-                {title: "商户号", data: "merchantId"},
-                {title:"支付配置",data:"alipayName"},
+                {title:"手机号", data: "mobile"},
+                {title:"座位号",data:"seatNo"},
                 {title:"订单号",data:"orderNo",
 //                    "render": function ( data, type, full, meta ) {
 //                        var h="<a href='#' data-toggle='modal' onclick='openLayui("+full.id+")'>"+data+"</a>";
@@ -177,8 +177,30 @@
                         return dataStr;
                     }
                 },
-                {title:"支付方式",data:"payType"},
+                {title:"类型",data:"orderType",
+                    "render": function ( data, type, full, meta ) {
+                        if (data =="ZHENG"){
+                            var h="正钓";
+                            return h;
+                        }else{
+                            var h="溜鱼";
+                            return h;
+                        }
+                    }
+                },
                 {title:"下单时间",data:"createTime",
+                    "render": function ( data, type, full, meta ) {
+                        var dataStr = fmtDate(data);
+                        return dataStr;
+                    }
+                },
+                {title:"开始时间",data:"beginTime",
+                    "render": function ( data, type, full, meta ) {
+                        var dataStr = fmtDate(data);
+                        return dataStr;
+                    }
+                },
+                {title:"结束时间",data:"endTime",
                     "render": function ( data, type, full, meta ) {
                         var dataStr = fmtDate(data);
                         return dataStr;

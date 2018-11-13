@@ -55,7 +55,7 @@
                     </h1>
                     <br>
                     <div class="col-sm-2">
-                        <input class="form-control" id="searchUsername" placeholder="请输入用户名" value="">
+                        <input class="form-control" id="searchOpenId" placeholder="请输入openId" value="">
                     </div>
                     <div class="col-sm-2">
                         <input class="form-control" id="searchMobile" placeholder="请输入手机号" value="">
@@ -235,29 +235,16 @@
             width:'256px',
             dropdownParent:$("#modalEdit")//设置父 model  处理和 bootstrap modal 冲突
         });
-//        function formatState (state) {
-//            if (!state.id) { return state.text; }
-//            var $state = $(
-//                '<span>' + state.text + '</span>'
-//            );
-//            return $state;
-//        };
-
-//        $('#sel_recommender').select2({
-//            placeholder: "请选择一个人名",
-//            templateResult: formatState,
-//            width:'256px'
-//        });
 
         //获取商户配置下拉框
-        getAliPayConfig();
+//        getAliPayConfig();
         getTable();
     });
 
     //动态渲染datetable数据
     function getTable() {
         var mobile = $("#searchMobile").val();
-        var username = $("#searchUsername").val();
+        var openId = $("#searchOpenId").val();
         var table = $('#userTable').dataTable({
             "destroy": true,//允许重新实例化Datatables
             "searching": false,//开启搜索功能
@@ -274,8 +261,8 @@
                 //aoData.state="COMPLETED";    //参数状态暂定死
                 aoData.sort = "createdDate,desc";  //根据创建时间倒序排列
                 //查询参数
-                if (username != "") {
-                    aoData.username = $("#searchUsername").val();
+                if (openId != "") {
+                    aoData.openId = $("#searchOpenId").val();
                 }
                 if (mobile != "") {
                     aoData.mobile = $("#searchMobile").val();
@@ -315,7 +302,8 @@
             },
             "columns": [
                 {title: "编号", data: "id"},
-                {title: "商户号", data: "merchantNo"},
+                {title: "手机号", data: "mobile"},
+                {title: "openid", data: "openId"},
                 {
                     title: "登录名", data: "username",
 //                    "render": function (data, type, full, meta) {
@@ -325,21 +313,14 @@
                 },
 
                 {
-                    title: "创建时间", data: "createTime",
+                    title: "注册时间", data: "createTime",
                     "render": function (data, type, full, meta) {
                         var dataStr = fmtDate(data);
                         return dataStr;
                     }
                 },
-//                {title: "商户状态", data: "lastLoginTime",
-//                    "render": function (data, type, full, meta) {
-//                        var dataStr = fmtDate(data);
-//                        return dataStr;
-//                    }
-//                },
-                {title: "费率", data: "rate"},
-                {title: "余额", data: "balance"},
-                {title:"商户状态",data:"status",
+//                {title: "余额", data: "balance"},
+                {title:"用户状态",data:"status",
                     "render": function ( data, type, full, meta ) {
                         var h;
                         if (data == "1"){
