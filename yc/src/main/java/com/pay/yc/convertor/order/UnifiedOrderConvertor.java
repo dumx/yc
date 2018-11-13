@@ -76,8 +76,8 @@ public class UnifiedOrderConvertor extends AbstractConvertor<UnifiedOrder, Unifi
         Config config=this.configRepository.findByType(model.getOrderType());
         dto.setConfigRemark(config.getRemark());
 
-        User user=this.userRepository.findOneById(model.getUserId());
-        dto.setMobile(user.getMobile());
+//        User user=this.userRepository.findOneById(model.getUserId());
+//        dto.setMobile(user.getMobile());
         return dto;
     }
 

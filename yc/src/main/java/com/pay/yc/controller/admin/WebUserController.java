@@ -1,14 +1,18 @@
 package com.pay.yc.controller.admin;
 
 import com.pay.yc.common.annotation.CurrentUserId;
+import com.pay.yc.common.enumpub.PaymentTradeStatus;
 import com.pay.yc.common.result.dto.PageResultDTO;
 import com.pay.yc.common.result.dto.ResultDTO;
 import com.pay.yc.convertor.UserConvertor;
 import com.pay.yc.dto.admin.UserDTO;
 import com.pay.yc.model.admin.PaymentAccount;
+import com.pay.yc.model.admin.PaymentItem;
 import com.pay.yc.model.admin.User;
+import com.pay.yc.model.order.UnifiedOrder;
 import com.pay.yc.repository.admin.PaymentAccountRepository;
 import com.pay.yc.repository.admin.UserRepository;
+import com.pay.yc.repository.order.UnifiedOrderRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -18,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +30,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户管理 WEB端
@@ -42,6 +54,10 @@ public class WebUserController {
     private UserConvertor UserConvertor;
     @Autowired
     private PaymentAccountRepository paymentAccountRepository;
+
+
+    @Autowired
+    private UnifiedOrderRepository unifiedOrderRepository;
 
     /**
      * 获取用户列表
@@ -179,6 +195,76 @@ public class WebUserController {
         User user = this.userRepository.findOneById(uid);
         UserDTO resultDTO = this.UserConvertor.toDTO(user);
         return ResultDTO.success(resultDTO);
+    }
+
+
+    /**
+     * 修改密码
+     *
+     * @return
+     */
+    @ApiOperation(value = "修改密码", notes = "修改密码", httpMethod = "POST")
+    @PostMapping(value = "/resetPwd")
+    public Object resetPwd(@RequestBody Map map, @CurrentUserId Long userId) {
+        String oldPwd = map.get("oldPwd").toString();
+        String newPwd = map.get("newPwd").toString();
+        User user = this.userRepository.findOne(userId);
+        BCryptPasswordEncoder encode = new BCryptPasswordEncoder();
+        //验证旧密码
+        if (!encode.matches(oldPwd, user.getPassword())) {
+            return ResultDTO.failure("旧密码不匹配!,请重新输入!");
+        } else {
+            user.setPassword(encode.encode(newPwd));
+            this.userRepository.save(user);
+            log.info("密码修改成功!");
+            return ResultDTO.success("密码修改成功!");
+        }
+    }
+
+
+    /**
+     * 获取首页tab信息
+     *
+     * @return
+     */
+    @ApiOperation(value = "获取首页tab信息", notes = "获取首页tab信息", httpMethod = "GET")
+    @GetMapping(value = "/getIndexInfo")
+    public Object getIndexInfo() throws Exception {
+        Map<String, Long> map = new HashMap<>();
+
+        //今日订单金额
+        Date date = new Date();
+        List<UnifiedOrder> unifiedOrders = this.unifiedOrderRepository.findByCreateTimeBetweenAndStatus(getStartOfDay(date), getEndOfDay(date), PaymentTradeStatus.SUCCESS);
+        Long todayCharge = 0L;
+        for (UnifiedOrder order : unifiedOrders) {
+            todayCharge += order.getTotalFee();
+        }
+
+        Long userSize = this.userRepository.countByIdNotIn(1L);
+        //今日充值
+        map.put("todayCharge", todayCharge);
+
+        //用户总数
+        map.put("userSize", userSize);
+
+        log.info("获取 首页信息");
+        return ResultDTO.success(map);
+
+    }
+
+
+    // 获得某天最大时间 2018-08-15 23:59:59
+    public static Date getEndOfDay(Date date) {
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
+        LocalDateTime endOfDay = localDateTime.with(LocalTime.MAX);
+        return Date.from(endOfDay.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    // 获得某天最小时间 2018-08-15 00:00:00
+    public static Date getStartOfDay(Date date) {
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
+        LocalDateTime startOfDay = localDateTime.with(LocalTime.MIN);
+        return Date.from(startOfDay.atZone(ZoneId.systemDefault()).toInstant());
     }
 
 

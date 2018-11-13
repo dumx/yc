@@ -7,6 +7,7 @@ import com.pay.yc.common.result.dto.ResultDTO;
 import com.pay.yc.convertor.order.UnifiedOrderConvertor;
 import com.pay.yc.dto.order.UnifiedOrderDTO;
 import com.pay.yc.model.order.UnifiedOrder;
+import com.pay.yc.repository.admin.StatisticsDao;
 import com.pay.yc.repository.admin.UserRepository;
 import com.pay.yc.repository.order.OrderRepositoryExecutor;
 import com.pay.yc.repository.order.UnifiedOrderRepository;
@@ -17,7 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -49,6 +54,10 @@ public class WebOrderController {
 
     @Autowired
     private UserRepository UserRepository;
+
+    @Autowired
+    private StatisticsDao statisticsDao;
+
 
     /**
      * 获取已完成订单
@@ -204,5 +213,22 @@ public class WebOrderController {
                 return query.where(predicate.toArray(pre)).getRestriction();
             }
         };
+    }
+
+    /**
+     * 获取充值代付图表(在已支付的前提下)
+     *
+     * @return
+     */
+    @ApiOperation(value = "获取充值代付图表", notes = "获取订单", httpMethod = "GET")
+    @GetMapping(value = "/getPaymentChart")
+    public Object getPaymentChart(@CurrentUserId Long userId) {
+        if (userId.equals(1L)) {
+            log.info("查询订单数量图表!");
+            return PageResultDTO.success(statisticsDao.getChartList(null));
+        } else {
+            log.info("查询订单数量图表!用户编号：" + userId);
+            return PageResultDTO.success(statisticsDao.getChartList(userId));
+        }
     }
 }

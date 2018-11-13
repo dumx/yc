@@ -173,7 +173,7 @@ public class WeixinController {
         HashMap<String, String> add = new HashMap<>();
         add.put("token", token);
         add.put("typeid", "100");
-        add.put("nickname", "测试");
+        add.put("nickname", "鱼池用户");
         add.put("tel", user.getMobile());
         String addResult = httpUrlConnection("https://api.parkline.cc/api/facecgi", add);
         log.info(addResult);

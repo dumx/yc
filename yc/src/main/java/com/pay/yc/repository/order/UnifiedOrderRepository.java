@@ -1,6 +1,7 @@
 package com.pay.yc.repository.order;
 
 import com.pay.yc.common.enumpub.PaymentTradeStatus;
+import com.pay.yc.model.admin.PaymentItem;
 import com.pay.yc.model.order.UnifiedOrder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +47,11 @@ public interface UnifiedOrderRepository extends Repository<UnifiedOrder, Long>{
 
    List<UnifiedOrder> findByBeginTimeEqualsAndStatus(Date beginTime,PaymentTradeStatus status);
 
+   //获取成功订单
    UnifiedOrder findByBeginTimeEqualsAndSeatNoAndStatus(Date beginTime,Integer seatNo,PaymentTradeStatus status);
+
+
+   //获取当日订单金额
+   List<UnifiedOrder> findByCreateTimeBetweenAndStatus(Date str, Date end,PaymentTradeStatus status);
 
 }

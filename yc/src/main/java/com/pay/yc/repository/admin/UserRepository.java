@@ -31,5 +31,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	//用户列表
 	Page<User> findAll(Pageable pageable);
 
+	Long  countByIdNotIn(Long userId);
+
 }
 	
