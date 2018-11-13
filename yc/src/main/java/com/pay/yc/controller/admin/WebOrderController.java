@@ -131,23 +131,6 @@ public class WebOrderController {
     }
 
     /**
-     * 获取未支付订单
-     *
-     * @param pageable
-     * @return
-     */
-//    @ApiOperation(value = "获取待支付订单", notes = "获取待支付订单", httpMethod = "GET")
-//    @RequestMapping(value = "/getUnPayOrderList", method = RequestMethod.GET)
-//    public PageResultDTO<UnifiedOrderDTO> getOrderList(@RequestParam(required=false) String subject, @RequestParam(required=false) String orderNo, Pageable pageable) {
-//        Specification<UnifiedOrder> specification=this.getWhereClause(subject,orderNo,null,PaymentTradeStatus.WATING);
-//        Page<UnifiedOrder> model = this.repositoryExecutor.findAll(specification,pageable);
-//        PageResultDTO<UnifiedOrderDTO> result = this.unifiedOrderConvertor.toResultDTO(model);
-//        log.info("获取待支付订单!");
-//        return result;
-//    }
-
-
-    /**
      * 查看订单详情
      *
      * @param orderId
