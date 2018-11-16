@@ -324,19 +324,29 @@ public class WeixinController {
                 User user = userRepository.findByOpenId(openId);
                 Map map = new HashMap();
                 if (user == null) {
-                    log.info("保存新授权用户信息======================================");
-                    User userModel = new User();
-                    userModel.setOpenId(openId);
-                    User u=this.userRepository.save(userModel);
-                    map.put("accessToken", access_token);
-                    map.put("refreshToken", refreshToken);
-                    map.put("openId", openId);
-                    map.put("id", u.getId());
-                    //获取系统 token
-                    String ycToken=this.getToken(u.getId());
-                    map.put("token", ycToken);
-                    map.put("mobile",u.getMobile());
-                    log.info("生成本系统新 token====================================:"+ycToken);
+                    if(openId!=null){
+                        log.info("保存新授权用户信息======================================");
+                        User userModel = new User();
+                        userModel.setOpenId(openId);
+                        User u=this.userRepository.save(userModel);
+                        map.put("accessToken", access_token);
+                        map.put("refreshToken", refreshToken);
+                        map.put("openId", openId);
+                        map.put("id", u.getId());
+                        //获取系统 token
+                        String ycToken=this.getToken(u.getId());
+                        map.put("token", ycToken);
+                        map.put("mobile",u.getMobile());
+                        log.info("生成本系统新 token====================================:"+ycToken);
+                    }else{
+                        log.info("openId为 null ******************************************");
+                        map.put("accessToken", access_token);
+                        map.put("refreshToken", refreshToken);
+                        map.put("openId", null);
+                        map.put("id", null);
+                        map.put("token", null);
+                        map.put("mobile",null);
+                    }
                 } else {
                     log.info("该用户已授权直接返回====================================");
                     map.put("openId", user.getOpenId());
