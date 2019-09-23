@@ -40,6 +40,8 @@ public class QWeixinUnifiedOrder extends EntityPathBase<WeixinUnifiedOrder> {
 
     public final StringPath nonceStr = createString("nonceStr");
 
+    public final StringPath openId = createString("openId");
+
     public final StringPath orderNo = createString("orderNo");
 
     public final StringPath prepayId = createString("prepayId");
@@ -50,7 +52,7 @@ public class QWeixinUnifiedOrder extends EntityPathBase<WeixinUnifiedOrder> {
 
     public final StringPath spbill_create_ip = createString("spbill_create_ip");
 
-    public final EnumPath<com.pay.yc.common.enumpub.order.PaymentTradeStatus> status = createEnum("status", com.pay.yc.common.enumpub.order.PaymentTradeStatus.class);
+    public final EnumPath<com.pay.yc.common.enumpub.PaymentTradeStatus> status = createEnum("status", com.pay.yc.common.enumpub.PaymentTradeStatus.class);
 
     public final StringPath subject = createString("subject");
 
@@ -62,7 +64,7 @@ public class QWeixinUnifiedOrder extends EntityPathBase<WeixinUnifiedOrder> {
 
     public final StringPath tradeNo = createString("tradeNo");
 
-    public final EnumPath<com.pay.yc.common.enumpub.order.PaymentOrderType> type = createEnum("type", com.pay.yc.common.enumpub.order.PaymentOrderType.class);
+    public final EnumPath<com.pay.yc.common.enumpub.PaymentOrderType> type = createEnum("type", com.pay.yc.common.enumpub.PaymentOrderType.class);
 
     //inherited
     public final NumberPath<Long> ver = _super.ver;

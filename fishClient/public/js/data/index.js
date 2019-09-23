@@ -10,7 +10,9 @@ $(function () {
                 this.getBase();
                 this.getOauth();
             }
-            this.checkMobile();
+            if(wxopenId!=undefined||wxopenId != null){
+                this.checkMobile();
+            }
         },
         swiper:function () {
             /*  轮播效果加载   */

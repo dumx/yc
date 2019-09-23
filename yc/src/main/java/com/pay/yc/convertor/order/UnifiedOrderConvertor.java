@@ -1,10 +1,10 @@
 package com.pay.yc.convertor.order;
 
 import com.pay.yc.common.result.AbstractConvertor;
+import com.pay.yc.common.util.order.UniformOrderGeneratorUtil;
 import com.pay.yc.constants.Constants;
 import com.pay.yc.dto.order.UnifiedOrderDTO;
 import com.pay.yc.model.admin.Config;
-import com.pay.yc.model.admin.User;
 import com.pay.yc.model.order.UnifiedOrder;
 import com.pay.yc.repository.admin.ConfigRepository;
 import com.pay.yc.repository.admin.UserRepository;
@@ -41,7 +41,7 @@ public class UnifiedOrderConvertor extends AbstractConvertor<UnifiedOrder, Unifi
         model.setCreateTime(dto.getCreateTime());
         model.setFinishTime(dto.getFinishTime());
         //订单号生成规则(19位)
-//        model.setOrderNo(UniformOrderGeneratorUtil.getOrderNum()+UniformOrderGeneratorUtil.getcurrTime()+UniformOrderGeneratorUtil.getRandomNumStringByLength(5));
+        model.setOrderNo(UniformOrderGeneratorUtil.getOrderNum()+UniformOrderGeneratorUtil.getcurrTime()+UniformOrderGeneratorUtil.getRandomNumStringByLength(5));
         //订单号生成规则(25位,年月日时分秒+8位用户ID(1802051731364632700000010)+5位随机数)
 //        model.setOrderNo(UniformOrderGeneratorUtil.getOrderNum()+haoAddOne(dto.getUserId().toString())+UniformOrderGeneratorUtil.getRandomNumStringByLength(5));
         model.setOrderNo(dto.getOrderNo());

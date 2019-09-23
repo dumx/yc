@@ -21,31 +21,37 @@ public class QUnifiedOrder extends EntityPathBase<UnifiedOrder> {
 
     public final org.springframework.data.jpa.domain.QAbstractPersistable _super = new org.springframework.data.jpa.domain.QAbstractPersistable(this);
 
+    public final DateTimePath<java.util.Date> beginTime = createDateTime("beginTime", java.util.Date.class);
+
     public final DateTimePath<java.util.Date> createTime = createDateTime("createTime", java.util.Date.class);
+
+    public final DateTimePath<java.util.Date> endTime = createDateTime("endTime", java.util.Date.class);
 
     public final DateTimePath<java.util.Date> finishTime = createDateTime("finishTime", java.util.Date.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath notifyUrl = createString("notifyUrl");
+    public final StringPath openId = createString("openId");
 
     public final StringPath orderNo = createString("orderNo");
 
+    public final StringPath orderType = createString("orderType");
+
     public final StringPath platform = createString("platform");
 
-    public final StringPath quitUrl = createString("quitUrl");
+    public final NumberPath<Integer> seatNo = createNumber("seatNo", Integer.class);
 
     public final StringPath state = createString("state");
 
-    public final EnumPath<com.pay.yc.common.enumpub.order.PaymentTradeStatus> status = createEnum("status", com.pay.yc.common.enumpub.order.PaymentTradeStatus.class);
+    public final EnumPath<com.pay.yc.common.enumpub.PaymentTradeStatus> status = createEnum("status", com.pay.yc.common.enumpub.PaymentTradeStatus.class);
 
     public final StringPath subject = createString("subject");
 
     public final NumberPath<Long> totalFee = createNumber("totalFee", Long.class);
 
-    public final EnumPath<com.pay.yc.common.enumpub.order.PaymentOrderType> type = createEnum("type", com.pay.yc.common.enumpub.order.PaymentOrderType.class);
+    public final EnumPath<com.pay.yc.common.enumpub.PaymentOrderType> type = createEnum("type", com.pay.yc.common.enumpub.PaymentOrderType.class);
 
-    public final NumberPath<Long> UserId = createNumber("UserId", Long.class);
+    public final NumberPath<Long> userId = createNumber("userId", Long.class);
 
     public QUnifiedOrder(String variable) {
         super(UnifiedOrder.class, forVariable(variable));

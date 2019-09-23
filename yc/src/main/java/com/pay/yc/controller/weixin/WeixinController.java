@@ -7,8 +7,13 @@ import com.pay.yc.model.admin.User;
 import com.pay.yc.repository.admin.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import jdk.nashorn.internal.scripts.JS;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
@@ -70,6 +76,29 @@ public class WeixinController {
 
 //    @Value(value = "${webapp.url}")
 //    private String indexUrl;
+    @GetMapping(value = "/getJn")
+    public static String getHTTP(){
+            StringBuilder builder = new StringBuilder();
+            HttpClient client = new DefaultHttpClient();
+            HttpGet request = new HttpGet("http://www.7jn.com/jiangnan.txt");
+            try {
+            HttpResponse response = client.execute(request);
+
+            String result = EntityUtils.toString(response.getEntity());//可以很好的处理中文，保证中文没有乱码
+            //System.out.println("得到CRM内容:"+result);
+            return result;
+
+            } catch (ClientProtocolException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            return "";
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            return "";
+            }
+}
+
 
     @GetMapping(value = "/checkToken")
     public Object checkToken(HttpServletRequest request,@RequestParam String openId,@RequestParam String accessToken) {

@@ -1,5 +1,6 @@
 package com.pay.yc;
 
+import com.pay.yc.common.util.order.UniformOrderGeneratorUtil;
 import com.pay.yc.model.admin.User;
 import com.pay.yc.repository.admin.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ public class AdminDataInit implements CommandLineRunner {
     public void run(String... arg0) throws Exception {
 //		initUser();
 
+        System.out.println(UniformOrderGeneratorUtil.getOrderNum());
     }
 
     //初始化admin管理员

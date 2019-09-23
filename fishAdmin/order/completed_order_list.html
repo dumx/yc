@@ -247,6 +247,7 @@
     }
     function openLayui(orderId) {
         $.ajax({
+
             type: "GET",
             url: "/apis/order/getOrderDetail?orderId="+orderId+"",
             //设置token

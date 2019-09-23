@@ -345,7 +345,7 @@
             </activation>
             <properties>
                 <profiles.active>dev</profiles.active>
-                <datasource.url>jdbc:mysql://%%%%%%%%%%:3306/yc?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;useSSL=false</datasource.url>
+                <datasource.url>jdbc:mysql://116.62.70.116:3306/yc?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;useSSL=false</datasource.url>
                 <datasource.driver>com.mysql.jdbc.Driver</datasource.driver>
                 <datasource.username>root</datasource.username>
                 <datasource.password>caonidaye..</datasource.password>

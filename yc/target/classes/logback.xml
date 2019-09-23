@@ -2,7 +2,7 @@
 <configuration scan="true" scanPeriod="10 seconds" debug="false">
 	<jmxConfigurator />
 
-	<property name="APP_NAME" value="zzhbody" />
+	<property name="APP_NAME" value="yc" />
 	<!--<property name="APPLOG_PATH" value="/var/log/portal" />--><!--服务器地址-->
 
 	<property name="APPLOG_PATH" value="../log/portal" /><!--本地地址-->
@@ -57,7 +57,7 @@
 
 
 	<!-- 自定义日志 -->
-    <logger name="com.zzhsoft.zzhbody" level="INFO" />
+    <logger name="com.pay.yc" level="INFO" />
     <logger name="org.springframework" level="WARN" />
     
 	<root level="INFO">

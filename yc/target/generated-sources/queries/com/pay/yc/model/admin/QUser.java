@@ -21,6 +21,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final com.pay.yc.common.result.QAbstractModel _super = new com.pay.yc.common.result.QAbstractModel(this);
 
+    public final NumberPath<Integer> binded = createNumber("binded", Integer.class);
+
     //inherited
     public final NumberPath<Long> createdBy = _super.createdBy;
 

@@ -114,7 +114,45 @@
 <script type="text/javascript" src="public/js/jquery/jquery.cookie.js"></script>
 <script type="text/javascript" src="public/js/app.js"></script>
 <!--<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>-->
+<script>
+    $(document).ready(function(){
+        getIndexInfo();
+    });
+    function getIndexInfo() {
+        $.ajax({
+            type: "GET",
+            url: "/apis/weixin/getIndexInfo?type=ZHENG,LIU",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            //设置token
+            // beforeSend: function (request) {
+            //     request.setRequestHeader(tokenKey, $.cookie("token"));
+            // },
+            success: function(data){
+                if(data.status=="success"){
+                    var result=data.data;
 
+                    var beginTime = new Date(result[0].beginTime).format("yyyy-MM-dd hh");
+                    var endTime = new Date(result[0].endTime).format("hh");
+                    //正钓门票
+                    $("#zhengName").html(result[0].name);
+                    $("#zhengTime").html(beginTime+':00'+'-'+endTime+':00');
+                    $("#zhengMoney").html("¥"+result[0].totalFee /100);
+                    $("#zhengRemarke").html(result[0].remark);
+                    //溜鱼时间
+                    var beginTime1 = new Date(result[1].beginTime).format("yyyy-MM-dd hh");
+                    var endTime1 = new Date(result[1].endTime).format("hh");
+
+                    $("#liuName").html(result[1].name);
+                    $("#liuTime").html(beginTime1+':00'+'-'+endTime1+':00');
+                    $("#liuMoney").html(result[1].totalFee /100);
+                    $("#liuRemarke").html(result[1].remark);
+                }
+
+            }
+        });
+    }
+</script>
 
 </body>
 </html>
